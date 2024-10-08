@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/08 17:08:24 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/08 20:59:54 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,23 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define EXEC 1
-# define REDIR 2
-# define PIPE 3
+# define EXEC_T 1
+# define REDIR_T 2
+# define PIPET_T 3
 
 # define MAXARGS 10
 # define PROMP	"minishell$ "
+
+# define WHITESPACE " \t\r\n\v"
+# define SYMBOLS "<|>&()"
+
+# define PIPE '|'
+# define REDIR_FROM '<'
+# define REDIR_TO '>'
+# define REDIR_ADD '+'
+# define HERE_DOC '-'
+# define ENV_VA '$'
+# define OTHER 'a'
 
 typedef struct s_cmd
 {
@@ -56,5 +67,12 @@ typedef struct s_pipe
 	t_cmd	*left;
 	t_cmd	*right;
 }	t_pipe;
+
+//utils.c
+int		fork1(void);
+void	exit_error(char *s);
+
+// parse
+t_cmd *parsecmd(char *s);
 
 #endif
