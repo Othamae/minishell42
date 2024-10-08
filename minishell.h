@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/08 14:21:24 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/08 17:08:24 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,6 @@ typedef struct s_cmd
 {
 	int	type;
 }	t_cmd;
-
-typedef struct s_his
-{
-	char			*line;
-	struct s_his	*next;
-	struct s_his	*prev;
-}	t_his;
 
 typedef struct s_exec
 {
