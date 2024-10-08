@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/08 13:20:58 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/08 14:21:24 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,18 @@
 
 # include "libft/libft.h"
 # include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define EXEC 1
 # define REDIR 2
 # define PIPE 3
 
 # define MAXARGS 10
+# define PROMP	"minishell$ "
 
 typedef struct s_cmd
 {
@@ -57,6 +63,5 @@ typedef struct s_pipe
 	t_cmd	*left;
 	t_cmd	*right;
 }	t_pipe;
-
 
 #endif
