@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/08 14:24:20 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/08 14:38:20 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,17 @@ int main(void)
 	
 	while((getcmd(buff,sizeof(buff)) >= 0))
 	{
+		if (buff[0] == 'c' && buff[1] == 'd' && buff[2] == ' ')
+		{
+		printf("Input: %c\n", buff[0]);
+		printf("Input: %c\n", buff[1]);
+		printf("Input: %s\n", buff+3);
+
+			buff[ft_strlen(buff -1)] = 0;
+			if (chdir(buff+3) < 0)
+				printf("cannot cd %s\n", buff+3);
+			continue;
+		}
 		printf("Input: %s\n", buff);
 	}
 
