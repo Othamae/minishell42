@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"*.sql": "sql",
+		"*.astro": "astro",
+		"*.ts": "typescript",
+		"minishell.h": "c"
+	}
+}
