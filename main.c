@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashobajo <ashobajo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:01:16 by ashobajo          #+#    #+#             */
-/*   Updated: 2024/10/08 19:24:02 by ashobajo         ###   ########.fr       */
+/*   Updated: 2024/10/09 05:39:02 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@
 // ◦ env with no options or arguments
 // ◦ exit with no options
 
-int avsh_echo(char **args);
-int avsh_cd(char **args);
-int avsh_pwd(char **args);
-int avsh_export(char **args);
-int avsh_unset(char **args);
-int avsh_env(char **args);
-int	avsh_launch(char **argv);
+int vash_echo(char **args);
+int vash_cd(char **args);
+int vash_pwd(char **args);
+int vash_export(char **args);
+int vash_unset(char **args);
+int vash_env(char **args);
+int	vash_launch(char **argv);
 
 char	*ft_strchr(const char *s, int c)
 {
 	unsigned char	ch;
-	
+
 	ch = (unsigned char)c;
 	while (*s != '\0')
 	{
@@ -47,7 +47,7 @@ char	*ft_strchr(const char *s, int c)
 
 char	*ft_strtok(char *str, const char *delim)
 {
-	static char	*saved_str = NULL; 
+	static char	*saved_str = NULL;
 	char		*token;
 	int			i = 0;
 	int			start = 0;
@@ -68,8 +68,8 @@ char	*ft_strtok(char *str, const char *delim)
 	token = &saved_str[start];
 	if (saved_str[i] != '\0')
 	{
-		saved_str[i] = '\0'; 
-		saved_str = &saved_str[i + 1]; 
+		saved_str[i] = '\0';
+		saved_str = &saved_str[i + 1];
 	}
 	else
 		saved_str = NULL;
@@ -77,7 +77,7 @@ char	*ft_strtok(char *str, const char *delim)
 }
 
 
-int	avsh_launch(char **argv)
+int	vash_launch(char **argv)
 {
 	pid_t pid;
 
@@ -94,7 +94,7 @@ int	avsh_launch(char **argv)
 		{
 			wait(NULL);
 		}
-		
+
 	else {
 		perror("a forking error occured");
 		exit(EXIT_FAILURE);
@@ -113,7 +113,7 @@ int	main(int argc, char **argv)
 	{
 		while (1)
 		{
-			line = readline("avsh> ");
+			line = readline("vash% ");
 			if (line == NULL)
 				break;
 			if (line[0] != '\0')
@@ -139,14 +139,14 @@ int	main(int argc, char **argv)
 				break;
 			}
 			if (strcmp(args[0], "cd") == 0)
-				avsh_cd(args);
+				vash_cd(args);
 			if (strcmp(args[0], "echo") == 0)
-				avsh_echo(args);
+				vash_echo(args);
 			if (strcmp(args[0], "pwd") == 0)
-				avsh_pwd(args);
+				vash_pwd(args);
 			if (strcmp(args[0], "env") == 0)
-				avsh_env(args);
-			// avsh_launch(args);
+				vash_env(args);
+			// vash_launch(args);
 			free(line);
 		}
 	}
@@ -157,7 +157,7 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-int avsh_cd(char **args)
+int vash_cd(char **args)
 {
 	if (chdir(args[1]) < 0)
 	{
@@ -167,34 +167,46 @@ int avsh_cd(char **args)
 	return (0);
 }
 
-int avsh_echo(char **args)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int vash_echo(char **args)
 {
 	char	*new_str;
 	char	*old_str;
-	int i = 1;
-	int j = 0;
-		
+	int		i = 1;
+	int		j = 0;
+	int		no_newline = 0;
+
 	if (args[1] == NULL)
 	{
 		printf("%s\n", "   ");
 		return (0);
 	}
-	
-	old_str = args[1];
+	if (strcmp(args[1], "-n") == 0)
+	{
+		no_newline = 1;
+		i++;
+	}
+
+	old_str = args[i];
+	if (old_str == NULL)
+	{
+		if (no_newline)
+			printf("%s", " ");
+		else
+			printf("\n");
+		return (0);
+	}
 	new_str = (char *)malloc(strlen(old_str) + 1);
 	if (new_str == NULL)
 	{
-		printf("error alocating new string");
+		printf("error allocating new string");
 		return (0);
 	}
-	
-	if (old_str[0] == 34 && old_str[strlen(old_str) - 1] == 34)
-	{
-		while (old_str[i] != old_str[strlen(old_str) - 1])
-			new_str[j++] = old_str[i++];
-		new_str[j] = '\0';
-	}
-	else if (old_str[0] == 39 && old_str[strlen(old_str) - 1] == 39)
+	if ((old_str[0] == 34 && old_str[strlen(old_str) - 1] == 34) ||
+		(old_str[0] == 39 && old_str[strlen(old_str) - 1] == 39))
 	{
 		while (old_str[i] != old_str[strlen(old_str) - 1])
 			new_str[j++] = old_str[i++];
@@ -202,13 +214,19 @@ int avsh_echo(char **args)
 	}
 	else
 		new_str = old_str;
-	
-	printf("%s\n", new_str);
-	
+	if (no_newline)
+		printf("%s", new_str);
+	else
+		printf("%s\n", new_str);
+
+	if (new_str != old_str)
+		free(new_str);
+
 	return (0);
 }
 
-int avsh_pwd(char **args)
+
+int vash_pwd(char **args)
 {
 	char *pwd = getenv("PWD");
 	if (pwd != NULL)
@@ -218,7 +236,7 @@ int avsh_pwd(char **args)
 	return 0;
 }
 
-int avsh_env(char **args)
+int vash_env(char **args)
 {
 	extern char **environ;
 	char **env;
