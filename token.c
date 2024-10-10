@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:11:55 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/09 11:12:21 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/09 21:18:23 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,17 @@ int	get_token(char **ps, char *es, char **q, char **eq)
 	char	*s;
 	int		ret;
 
-	while (s < es && ft_strchr(WHITESPACE ,*s))
+	s = *ps;
+
+	while (s < es && ft_strchr(WHITESPACE, *s))
 		s++;
+	
 	if (q)
 		*q = s;
 	ret = *s;
+
 	if (*s == 0)
-		return 0;
+		return (0);
 	if(*s == PIPE || *s == ENV_VA)
 		s++;
 	else if(*s == REDIR_TO)
@@ -50,15 +54,18 @@ int	get_token(char **ps, char *es, char **q, char **eq)
 		while (s < es && !ft_strchr(WHITESPACE, *s) && !ft_strchr(SYMBOLS, *s))
 			s++;
 	}
-	if (*eq)
+
+	if (eq)
 		*eq = s;
+	
 	while (s < es && ft_strchr(WHITESPACE, *s))
 		s++;
+	
 	*ps = s;
 	return (ret);
 }
 
-int	findNextToken(char **ps, char **es, char *tokens)
+int	find_next_token(char **ps, char *es, char *tokens)
 {
 	char *s;
 
