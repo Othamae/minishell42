@@ -6,7 +6,7 @@
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:01:16 by ashobajo          #+#    #+#             */
-/*   Updated: 2024/10/10 18:12:48 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/11 05:30:10 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ size_t ft_strlen(const char *str)
 {
 	size_t len = 0;
 
-	while (str[len] != '\0')  // Increment len until the null terminator is found
+	while (str[len] != '\0')
 		len++;
 
-	return len;  // Return the length of the string (excluding the null terminator)
+	return len;
 }
 
 int ft_strncmp(const char *s1, const char *s2, size_t n)
