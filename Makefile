@@ -6,7 +6,7 @@
 #    By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 16:52:40 by vconesa-          #+#    #+#              #
-#    Updated: 2024/10/12 12:39:18 by vconesa-         ###   ########.fr        #
+#    Updated: 2024/10/12 12:49:09 by vconesa-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,4 +67,3 @@ re:							fclean all
 
 .PHONY:						all clean fclean re
 
--include $(DEPS)
