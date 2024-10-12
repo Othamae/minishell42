@@ -1,16 +1,28 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/10/11 16:52:40 by vconesa-          #+#    #+#              #
+#    Updated: 2024/10/12 12:39:18 by vconesa-         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+
 NAME				:=		minishell
 PATH_SRC			:=		src
-PATH_BUILD			:=		build
-PATH_LIBFT			:=		libft
-SRCS				:=		$(shell find $(PATH_SRC) -name *.c)
-OBJS				:=		$(SRCS:%.c=$(PATH_BUILD)/%.o)
-DEPS				:=		$(OBJS:.o=.d)
-INC_DIRS			:=		$(shell find $(PATH_SRC) -type d)
+PATH_BUILD			:=		./build
+LIBFT_PATH 			:= 		./libft
+LIBFT 				:= 		$(LIBFT_PATH)/libft.a
+SRCS				:=		$(shell find $(PATH_SRC) -name *.c) # TODO: List the files .c
+OBJS				:=		$(SRCS:$(PATH_SRC)/%.c=$(PATH_BUILD)/%.o)
+INC_DIRS			:=		./include
 
 CC					:=		gcc
-MACOSX_DEPLOYMENT_TARGET := 11.1
-FLAGS_COMP			:= 		-Wall -Wextra -Werror -g -I$(INC_DIRS) -MMD -MP
-FLAGS_LINKING		:=		-L$(PATH_LIBFT) -lft -lncurses -ltermcap -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include -lreadline
+FLAGS 				:= 		-g -Wall -Wextra -Werror
+FLAGS_LIB			:= 		-lreadline
 RM					:=		rm -rf
 
 _YELLOW				:=		\e[38;5;184m
@@ -28,26 +40,28 @@ _ASCII_ART			:=		$(_ASCII_GREEN)██████   ██████  ██�
                             █████     █████ █████ ████ █████ █████ ██████  ████ █████░░██████  █████ █████\n\
                             ░░░░░     ░░░░░ ░░░░░ ░░░░ ░░░░░ ░░░░░ ░░░░░ ░░░░░░  ░░░░ ░░░░░  ░░░░░░  ░░░░░ ░░░░░$(_RESET)\n
 
+$(PATH_BUILD)/%.o: $(PATH_SRC)/%.c
+							mkdir -p $(dir $@)
+							$(CC) $(FLAGS) -c -o $@ $<
+
+
 all:						$(NAME)
 							@ printf "$(_SUCCESS) Compilation done\n"
 							@ printf "$(_ASCII_ART)"
 
-$(NAME):					$(OBJS)
-							@ $(MAKE) -C $(PATH_LIBFT)  # Build libft first
-							@ $(CC) $(FLAGS_COMP) -o $@ $(OBJS) $(FLAGS_LINKING)
+$(NAME):					$(LIBFT) $(OBJS)
+							$(CC) $(FLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(FLAGS_LIB)
 
-$(PATH_BUILD)/%.o:			%.c
-							@ mkdir -p $(dir $@)
-							@ $(CC) $(FLAGS_COMP) -c $< -o $@
+$(LIBFT):
+							make -C $(LIBFT_PATH) all
 
-clean:
-							@ $(RM) $(PATH_BUILD)
-							@ make -C $(PATH_LIBFT) clean
-							@ printf "$(_INFO) Deleted files and directory\n"
+clean:						
+							make -C $(LIBFT_PATH) clean
+							$(RM) $(OBJS)
 
-fclean:						clean
-							@ $(RM) $(NAME)
-							@ make -C $(PATH_LIBFT) fclean
+fclean: 					clean
+							make -C $(LIBFT_PATH) fclean
+							$(RM) $(NAME)
 
 re:							fclean all
 

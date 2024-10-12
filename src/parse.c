@@ -6,11 +6,11 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/10 16:34:47 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/12 11:54:10 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 t_cmd	*execcmd(void)
 {

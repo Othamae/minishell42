@@ -6,11 +6,11 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:11:55 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/09 21:18:23 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/12 11:54:13 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int	get_token(char **ps, char *es, char **q, char **eq)
 {

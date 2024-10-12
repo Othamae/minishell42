@@ -6,11 +6,11 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/10 17:13:59 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/12 11:55:34 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 
 char	*ft_strtok(char *str, const char *delim)
@@ -203,7 +203,7 @@ int		ft_pwd(void)
 		return (0);
 }
 
-int vash_pwd(char **args)
+int vash_pwd(void)
 {
 	char *pwd = getenv("PWD");
 	if (pwd != NULL)
@@ -213,7 +213,7 @@ int vash_pwd(char **args)
 	return 0;
 }
 
-int vash_env(char **args)
+int vash_env(void)
 {
 	extern char **environ;
 	char **env;
@@ -261,7 +261,7 @@ int do_builtins(char *buff)
 		//vash_pwd(args);
 		ft_pwd();
 	else if (strcmp(args[0], "env") == 0)
-		vash_env(args);
+		vash_env();
 	else
 	{
 		free(line);
