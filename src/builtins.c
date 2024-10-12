@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/12 11:55:34 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/12 14:48:33 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,7 @@ int do_builtins(char *buff)
 	if (strcmp(args[0], "exit") == 0)
 	{
 		free(line);
-		return (0);
+		exit(0);
 	}
 	if (strcmp(args[0], "cd") == 0)
 		vash_cd(args);
