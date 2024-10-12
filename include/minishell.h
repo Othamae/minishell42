@@ -6,14 +6,14 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/10 16:53:57 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/12 11:56:01 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -93,8 +93,8 @@ int	find_next_token(char **ps, char *es, char *tokens);
 // builtins
 int vash_echo(char **args);
 int vash_cd(char **args);
-int vash_pwd(char **args);
-int vash_env(char **args);
+int vash_pwd(void);
+int vash_env(void);
 int	vash_launch(char **argv);
 int do_builtins(char *line);
 
