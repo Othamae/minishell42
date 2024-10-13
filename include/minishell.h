@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/13 16:19:54 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/13 17:56:29 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@
 # define HERDOC_T 5
 
 # define MAXARGS 10
-# define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002 \
-				Minishell>$ \001\e[0m\002"
+# define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
 
 # define WHITESPACE " \t\r\n\v"
 # define SYMBOLS "<|>&()"
@@ -107,7 +106,9 @@ int		vash_launch(char **argv);
 int		do_builtins(char *line);
 
 // exec
-void	handle_herdoc(t_herdoc *hcmd);
 void	runcmd(t_cmd *cmd);
+void	handle_herdoc(t_herdoc *hcmd);
+void	handle_pipe(t_pipe *pcmd);
+void	exec_pipe_child(t_cmd *cmd, int fd, int fd_in, int fd_out);
 
 #endif
