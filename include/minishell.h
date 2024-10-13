@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/12 11:56:01 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/13 15:45:23 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define REDIR_T 2
 # define PIPE_T 3
 # define LIST_T 4
+# define HERDOC_T 5
 
 # define MAXARGS 10
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002 Minishell>$ \001\e[0m\002"
@@ -70,6 +71,13 @@ typedef struct s_pipe
 	t_cmd	*left;
 	t_cmd	*right;
 }	t_pipe;
+
+typedef struct s_herdoc
+{
+	t_cmd	base;
+	char	*delim;
+	t_cmd	*right;
+}	t_herdoc;
 
 // typedef struct s_list
 // {
