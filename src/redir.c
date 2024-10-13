@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   herdoc.c                                           :+:      :+:    :+:   */
+/*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 15:54:14 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/13 17:52:20 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/13 18:04:30 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,15 @@ void	handle_herdoc(t_herdoc *hcmd)
 		exec_pipe_child(hcmd->right, 0, p[0], -1);
 	close(p[0]);
 	wait(0);
+}
+
+void	handle_redir(t_redir *rcmd)
+{
+	close(rcmd->fd);
+	if (open(rcmd->file, rcmd->mode, PERMISSIONS) < 0)
+	{
+		printf("open %s failed\n", rcmd->file);
+		exit(1);
+	}
+	runcmd(rcmd->cmd);
 }
