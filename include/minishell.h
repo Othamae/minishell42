@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/13 18:05:11 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/13 18:49:54 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,6 @@ void	runcmd(t_cmd *cmd);
 void	handle_herdoc(t_herdoc *hcmd);
 void	handle_pipe(t_pipe *pcmd);
 void	handle_redir(t_redir *rcmd);
-void	exec_pipe_child(t_cmd *cmd, int fd, int fd_in, int fd_out);
+void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left);
 
 #endif
