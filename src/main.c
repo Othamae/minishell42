@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/12 11:54:03 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/13 15:50:27 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void runcmd(t_cmd *cmd)
 	t_exec *ecmd;
 	t_pipe *pcmd;
 	t_redir *rcmd;
+	t_herdoc *hcmd;
 
 	if(cmd == 0)
 		exit(1);
@@ -85,6 +86,51 @@ void runcmd(t_cmd *cmd)
 		close(p[0]);
 		close(p[1]);
 		wait(0);
+		wait(0);
+	}
+	else if(cmd->type == HERDOC_T)
+	{
+		hcmd =(t_herdoc *)cmd;
+        if (pipe(p) < 0)
+            exit_error("pipe");
+		char *line;
+		while (1)
+		{
+			line = readline("> ");
+			if (line == NULL)
+				break;
+			if (ft_strncmp(line, hcmd->delim, ft_strlen(hcmd->delim)) == 0)
+			{
+				free(line);
+				break;
+			}
+			size_t len = ft_strlen(line);
+			if (write(p[1], line, len) != (ssize_t)len)
+			{
+				perror("write");
+				free(line);
+				close(p[1]);
+				exit(EXIT_FAILURE);
+			}
+			if (write(p[1], "\n", 1) != 1)
+			{
+				perror("write");
+				free(line);
+				close(p[1]);
+				exit(EXIT_FAILURE);
+			}
+			
+			free(line);
+		}
+		close(p[1]);
+		if (fork1() == 0)
+		{
+			close(0);        
+			dup(p[0]);     
+			close(p[0]); 			
+			runcmd(hcmd->right);
+		}
+		close(p[0]);
 		wait(0);
 	}
 	else
