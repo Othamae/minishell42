@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/12 11:54:10 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/13 15:41:49 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,15 @@ t_cmd	*redircmd(t_cmd *subcmd, char *file, char *efile, int mode, int fd)
     return ((t_cmd *)cmd);
 }
 
+t_cmd *heredoccmd(char *delim, t_cmd *subcmd)
+{
+	t_herdoc *cmd = malloc(sizeof(*cmd));
+	cmd->base.type = HERDOC_T;
+	cmd->delim = ft_strdup(delim);
+	cmd->right = subcmd;
+	return ((t_cmd *)cmd);
+}
+
 t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es)
 {
 	int tok;
@@ -67,6 +76,8 @@ t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es)
 			cmd = redircmd(cmd, q, eq, O_WRONLY|O_CREAT|O_TRUNC, 1);
 		else if (tok == REDIR_ADD)
 			cmd = redircmd(cmd, q, eq, O_WRONLY|O_CREAT|O_APPEND, 1);
+		else if (tok == HERE_DOC)
+			cmd = heredoccmd(q, cmd);
 	}
 	return (cmd);
 }
@@ -132,6 +143,7 @@ t_cmd	*nulterminate(t_cmd *cmd)
 	//t_list *lcmd;
 	t_pipe *pcmd;
 	t_redir *rcmd;
+	t_herdoc *hcmd;
 
 	if(cmd == 0)
 		return 0;
@@ -153,6 +165,12 @@ t_cmd	*nulterminate(t_cmd *cmd)
 		pcmd = (t_pipe*)cmd;
 		nulterminate(pcmd->left);
 		nulterminate(pcmd->right);
+	}
+	else if(cmd->type == HERDOC_T)
+	{
+		hcmd = (t_herdoc *)cmd;
+		nulterminate(hcmd->right);
+
 	}
 	// else if(cmd->type == LIST_T)
 	// {

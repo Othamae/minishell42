@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/12 11:56:01 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/13 18:49:54 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@
 # define REDIR_T 2
 # define PIPE_T 3
 # define LIST_T 4
+# define HERDOC_T 5
 
 # define MAXARGS 10
-# define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002 Minishell>$ \001\e[0m\002"
+# define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
 
 # define WHITESPACE " \t\r\n\v"
 # define SYMBOLS "<|>&()"
+# define PERMISSIONS 0664
 
 # define PIPE '|'
 # define REDIR_FROM '<'
@@ -71,6 +73,13 @@ typedef struct s_pipe
 	t_cmd	*right;
 }	t_pipe;
 
+typedef struct s_herdoc
+{
+	t_cmd	base;
+	char	*delim;
+	t_cmd	*right;
+}	t_herdoc;
+
 // typedef struct s_list
 // {
 // 	int		type;
@@ -78,24 +87,30 @@ typedef struct s_pipe
 // 	t_cmd	*right;
 // }	t_list;
 
-
 //utils.c
 int		fork1(void);
 void	exit_error(char *s);
 
 // parse
-t_cmd *parsecmd(char *s);
+t_cmd	*parsecmd(char *s);
 
 // token
-int	get_token(char **ps, char *es, char **q, char **eq);
-int	find_next_token(char **ps, char *es, char *tokens);
+int		find_next_token(char **ps, char *es, char *tokens);
+int		get_token(char **ps, char *es, char **q, char **eq);
 
 // builtins
-int vash_echo(char **args);
-int vash_cd(char **args);
-int vash_pwd(void);
-int vash_env(void);
-int	vash_launch(char **argv);
-int do_builtins(char *line);
+int		vash_echo(char **args);
+int		vash_cd(char **args);
+int		vash_pwd(void);
+int		vash_env(void);
+int		vash_launch(char **argv);
+int		do_builtins(char *line);
+
+// exec
+void	runcmd(t_cmd *cmd);
+void	handle_herdoc(t_herdoc *hcmd);
+void	handle_pipe(t_pipe *pcmd);
+void	handle_redir(t_redir *rcmd);
+void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left);
 
 #endif
