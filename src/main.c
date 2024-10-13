@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/13 18:22:02 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/13 18:51:11 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	main(void)
 		if (fd >= 3)
 		{
 			close(fd);
-			break;
+			break ;
 		}
 		fd = open(PROMPT, O_RDWR);
 	}
