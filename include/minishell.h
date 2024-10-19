@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/13 18:49:54 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/19 16:18:20 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@
 # define EXEC_T 1
 # define REDIR_T 2
 # define PIPE_T 3
-# define LIST_T 4
-# define HERDOC_T 5
+# define HERDOC_T 4
+# define AND_T 5
+# define OR_T 6
+# define SUBSHELL_T 7
 
 # define MAXARGS 10
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
@@ -43,6 +45,10 @@
 # define HERE_DOC '-'
 # define ENV_VA '$'
 # define OTHER 'a'
+# define AND '&'
+# define OR	'o'
+# define OPEN_P '('
+# define CLOSE_P ')'
 
 typedef struct s_cmd
 {
@@ -80,13 +86,18 @@ typedef struct s_herdoc
 	t_cmd	*right;
 }	t_herdoc;
 
-// typedef struct s_list
-// {
-// 	int		type;
-// 	t_cmd	*left;
-// 	t_cmd	*right;
-// }	t_list;
+typedef struct s_clist
+{
+	t_cmd	base;
+	t_cmd	*left;
+	t_cmd	*right;
+}	t_clist;
 
+typedef struct s_subshell
+{
+	t_cmd	base;
+	t_cmd	*cmd;
+}	t_subshell;
 //utils.c
 int		fork1(void);
 void	exit_error(char *s);
