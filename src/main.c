@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/12 11:54:03 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/19 10:56:50 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	getcmd(char *buff, int nbuf)
 	input = readline(PROMPT);
 	if (!input)
 		return -1;
-	ft_strlcpy(buff, input, nbuf);	
+	ft_strlcpy(buff, input, nbuf);
 	if(buff[0] == 0) // EOF
 		return -1;
 	free(input);
@@ -47,9 +47,8 @@ void runcmd(t_cmd *cmd)
 			exit(1);
 		execve(ecmd->argv[0], ecmd->argv, environ);
 		printf("exec %s failed\n", ecmd->argv[0]);
-
 	}
-	else if(cmd->type == REDIR_T) 
+	else if(cmd->type == REDIR_T)
 	{
 		rcmd = (t_redir *)cmd;
 		close(rcmd->fd);
@@ -93,33 +92,76 @@ void runcmd(t_cmd *cmd)
 
 }
 
-
-int main(void)
+int	main(int argc, char **argv)
 {
+	(void) argv;
 	static char	buff[100];
 	int			fd;
 
-	while((fd = open(PROMPT, O_RDWR)) >= 0)
+	if (argc == 1)
 	{
-		if (fd >= 3)
+		while((fd = open(PROMPT, O_RDWR)) >= 0)
 		{
-			close(fd);
-			break;
+			if (fd >= 3)
+			{
+				close(fd);
+				break;
+			}
+		}
+		handle_signals();
+		while (1)
+		{
+			while((getcmd(buff,sizeof(buff)) >= 0))
+			{
+				add_history(buff);
+				//we should check first if no token in the line the do builting
+				if (do_builtins(buff))
+					continue;
+				if(fork1() == 0)
+				{
+					runcmd(parsecmd(buff));
+				}
+
+				wait(NULL);
+			}
+			// exit(1);
 		}
 	}
-	
-	while((getcmd(buff,sizeof(buff)) >= 0))
-	{
-
-		add_history(buff);
-		if (do_builtins(buff))
-			continue;
-		if(fork1() == 0)
+	else
 		{
-			runcmd(parsecmd(buff));
+			printf("usage: ./minishell\n");
 		}
-		wait(0);
-	}
-	exit(1);
-
+	return (0);
 }
+
+
+// int main(void)
+// {
+// 	static char	buff[100];
+// 	int			fd;
+
+// 	handle_signals();
+
+// 	while((fd = open(PROMPT, O_RDWR)) >= 0)
+// 	{
+// 		if (fd >= 3)
+// 		{
+// 			close(fd);
+// 			break;
+// 		}
+// 	}
+
+// 	while((getcmd(buff,sizeof(buff)) >= 0))
+// 	{
+
+// 		add_history(buff);
+// 		if (do_builtins(buff))
+// 			continue;
+// 		if(fork1() == 0)
+// 		{
+// 			runcmd(parsecmd(buff));
+// 		}
+// 		wait(0);
+// 	}
+// 	exit(1);
+// }

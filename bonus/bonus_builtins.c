@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   bonus_builtins.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/19 11:05:49 by mac              ###   ########.fr       */
+/*   Created: 2024/10/19 10:54:10 by mac               #+#    #+#             */
+/*   Updated: 2024/10/19 11:11:48 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,12 +340,34 @@ int vash_unset(char **args)
 	return 0;
 }
 
+char *trim_whitespace(char *str)
+{
+	char *end;
+	while (*str == ' ') str++;
+	if (*str == '\0')
+		return str;
+	end = str + ft_strlen(str) - 1;
+	while (end > str && *end == ' ') end--;
+	*(end + 1) = '\0';
+	return str;
+}
+
 int do_builtins(char *buff)
 {
 	int i;
 	char *token;
 	char *args[64];
 	char *line = ft_strdup(buff);
+	char **expanded_args;
+
+	line = trim_whitespace(line);
+
+	if (line == NULL || *line == '\0')
+	{
+		free(line);
+		return 0;
+	}
+
 	i = 0;
 	token = ft_strtok(line, " ");
 	while (token != NULL)
@@ -354,42 +376,85 @@ int do_builtins(char *buff)
 		token = ft_strtok(NULL, " ");
 	}
 	args[i] = NULL;
-	if (args[0] == NULL)
+	expanded_args = expand_wildcards(args);
+
+	if (expanded_args[0] == NULL)
 	{
 		free(line);
 		return (0);
 	}
-
-	if (ft_strncmp(args[0], "exit", 5) == 0)
+	if (ft_strncmp(expanded_args[0], "exit", 5) == 0)
 	{
 		free(line);
 		exit(0);
 	}
-	if (ft_strncmp(args[0], "cd",3) == 0)
-		vash_cd(args);
-	else if (ft_strncmp(args[0], "echo",5) == 0)
-		vash_echo(args);
-	else if (ft_strncmp(args[0], "pwd",4) == 0)
-		//vash_pwd(args);
+	if (ft_strncmp(expanded_args[0], "cd", 3) == 0)
+		vash_cd(expanded_args);
+	else if (ft_strncmp(expanded_args[0], "echo", 5) == 0)
+		vash_echo(expanded_args);
+	else if (ft_strncmp(expanded_args[0], "pwd", 4) == 0)
 		ft_pwd();
-	else if (ft_strncmp(args[0], "env",4) == 0)
+	else if (ft_strncmp(expanded_args[0], "env", 4) == 0)
 		vash_env();
-
-	else if ((ft_strncmp(args[0], "export",7) == 0) || ft_strncmp(args[0], "setenv",7) == 0)
+	else if ((ft_strncmp(expanded_args[0], "export", 7) == 0) || ft_strncmp(expanded_args[0], "setenv", 7) == 0)
 	{
-		if (args[1] == NULL && (ft_strncmp(args[0], "setenv",7) != 0))
+		if (expanded_args[1] == NULL && (ft_strncmp(expanded_args[0], "setenv", 7) != 0))
 			vash_env();
 		else
-			vash_export(args);
+			vash_export(expanded_args);
 	}
-	else if ((ft_strncmp(args[0], "unset",6) == 0) || (ft_strncmp(args[0], "unsetenv", 9) == 0))
-		vash_unset(args);
-	// vash_launch(args);
+	else if ((ft_strncmp(expanded_args[0], "unset", 6) == 0) || (ft_strncmp(expanded_args[0], "unsetenv", 9) == 0))
+		vash_unset(expanded_args);
 	else
 	{
-		free(line);
-		return (0);
+		vash_launch(expanded_args);
 	}
+
 	free(line);
-	return (1);
+	free(expanded_args);
+	return 1;
+}
+
+char **expand_wildcards(char **args)
+{
+	glob_t glob_result;
+	int i = 0;
+	char **expanded_args;
+	int expanded_index = 0;
+	int glob_flags = 0;
+
+	expanded_args = malloc(1024 * sizeof(char *));
+	if (!expanded_args)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+
+	while (args[i])
+	{
+		if (ft_strchr(args[i], '*') || ft_strchr(args[i], '?'))
+		{
+			if (glob(args[i], glob_flags, NULL, &glob_result) == 0)
+			{
+				size_t j = 0;
+				while (j < glob_result.gl_pathc)
+				{
+					expanded_args[expanded_index++] = ft_strdup(glob_result.gl_pathv[j]);
+					j++;
+				}
+				globfree(&glob_result);
+			}
+			else
+			{
+				expanded_args[expanded_index++] = ft_strdup(args[i]);
+			}
+		}
+		else
+		{
+			expanded_args[expanded_index++] = ft_strdup(args[i]);
+		}
+		i++;
+	}
+	expanded_args[expanded_index] = NULL;
+	return expanded_args;
 }

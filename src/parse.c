@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/12 11:54:10 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/16 19:35:47 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_cmd	*redircmd(t_cmd *subcmd, char *file, char *efile, int mode, int fd)
 	cmd->efile = efile;
 	cmd->mode = mode;
 	cmd->fd = fd;
-    return ((t_cmd *)cmd);
+	return ((t_cmd *)cmd);
 }
 
 t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es)
@@ -159,7 +159,7 @@ t_cmd	*nulterminate(t_cmd *cmd)
 	// 	lcmd = (t_list*)cmd;
 	// 	nulterminate(lcmd->left);
 	// 	nulterminate(lcmd->right);
-	// }	
+	// }
 	return (cmd);
 }
 

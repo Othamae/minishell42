@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/12 11:56:01 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/19 10:33:07 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
-# include <linux/limits.h>
+# include <signal.h>
+#include <glob.h>
+// # include <linux/limits.h>
 
 # define EXEC_T 1
 # define REDIR_T 2
@@ -30,6 +32,8 @@
 
 # define MAXARGS 10
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002 Minishell>$ \001\e[0m\002"
+
+# define NOTBUILTIN "<|>&()+-$" //AbdulAzeez
 
 # define WHITESPACE " \t\r\n\v"
 # define SYMBOLS "<|>&()"
@@ -87,15 +91,26 @@ void	exit_error(char *s);
 t_cmd *parsecmd(char *s);
 
 // token
-int	get_token(char **ps, char *es, char **q, char **eq);
-int	find_next_token(char **ps, char *es, char *tokens);
+int		get_token(char **ps, char *es, char **q, char **eq);
+int		find_next_token(char **ps, char *es, char *tokens);
 
 // builtins
-int vash_echo(char **args);
-int vash_cd(char **args);
-int vash_pwd(void);
-int vash_env(void);
-int	vash_launch(char **argv);
-int do_builtins(char *line);
+int		vash_echo(char **args);
+int		vash_cd(char **args);
+int		vash_pwd(void);
+int		vash_env(void);
+int		vash_launch(char **argv);
+int		do_builtins(char *line);
+
+//signal
+void	handle_sigint(int sig);
+void	handle_signals(void);
+void	handle_eof(int sig);
+
+//expand wildcards
+char **expand_wildcards(char **args);
+
+//AbdulAzeez
+int check_symbols(char *input);
 
 #endif
