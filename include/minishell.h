@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/19 16:18:20 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/22 10:05:40 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,19 @@ typedef struct s_exec
 	char	*eargv[MAXARGS];
 }	t_exec;
 
+typedef struct s_redir_info
+{
+	int	mode;
+	int	fd;
+}	t_redir_info;
+
 typedef struct s_redir
 {
-	t_cmd	base;
-	char	*file;
-	char	*efile;
-	int		mode;
-	int		fd;
-	t_cmd	*cmd;
+	t_cmd			base;
+	char			*file;
+	char			*efile;
+	t_redir_info	info;
+	t_cmd			*cmd;
 }	t_redir;
 
 typedef struct s_pipe
@@ -98,12 +103,28 @@ typedef struct s_subshell
 	t_cmd	base;
 	t_cmd	*cmd;
 }	t_subshell;
+
 //utils.c
 int		fork1(void);
 void	exit_error(char *s);
 
 // parse
 t_cmd	*parsecmd(char *s);
+t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es);
+
+// parse_utils
+t_cmd	*handle_parseredirs(t_cmd *cmd, char *q, char *eq, int tok);
+t_cmd	*handle_exec(char **ps, char *es, t_exec *cmd, t_cmd *ret);
+
+// nulterminate
+t_cmd	*nulterminate(t_cmd *cmd);
+
+// inits
+t_cmd	*execcmd(void);
+t_cmd	*pipecmd(t_cmd *left, t_cmd *right);
+t_cmd	*redircmd(t_cmd *subcmd, char *file, char *efile, t_redir_info info);
+t_cmd	*heredoccmd(char *delim, t_cmd *subcmd);
+t_cmd	*listcmd(t_cmd *left, t_cmd *right, int type);
 
 // token
 int		find_next_token(char **ps, char *es, char *tokens);
@@ -120,7 +141,7 @@ int		do_builtins(char *line);
 // exec
 void	runcmd(t_cmd *cmd);
 void	handle_herdoc(t_herdoc *hcmd);
-void	handle_pipe(t_pipe *pcmd);
+int		handle_pipe(t_pipe *pcmd);
 void	handle_redir(t_redir *rcmd);
 void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left);
 
