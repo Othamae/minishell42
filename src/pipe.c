@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 16:22:06 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/13 18:49:31 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/22 09:06:05 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left)
 	runcmd(cmd);
 }
 
-void	handle_pipe(t_pipe *pcmd)
+int	handle_pipe(t_pipe *pcmd)
 {
 	int	p[2];
+	int	status_left;
+	int	status_right;
 
 	if (pipe(p) < 0)
 		exit_error("pipe");
@@ -41,6 +43,6 @@ void	handle_pipe(t_pipe *pcmd)
 		exec_pipe_child(pcmd->right, p, 0);
 	close(p[0]);
 	close(p[1]);
-	wait(0);
-	wait(0);
+	wait(&status_left);
+	return (WEXITSTATUS(status_right));
 }
