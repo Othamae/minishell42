@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:11:51 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/20 20:28:54 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/22 10:04:10 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,31 @@ t_cmd	*handle_parseredirs(t_cmd *cmd, char *q, char *eq, int tok)
 	else if (tok == HERE_DOC)
 		cmd = heredoccmd(q, cmd);
 	return (cmd);
+}
+
+t_cmd	*handle_exec(char **ps, char *es, t_exec *cmd, t_cmd *ret)
+{
+	int		token;
+	char	*q;
+	char	*eq;
+	int		i;
+
+	i = 0;
+	while (!find_next_token(ps, es, "|&)"))
+	{
+		token = get_token(ps, es, &q, &eq);
+		if (token == 0)
+			break ;
+		if (token != OTHER)
+			exit_error("syntax error\n");
+		cmd->argv[i] = q;
+		cmd->eargv[i] = eq;
+		i++;
+		if (i >= MAXARGS)
+			exit_error("Too many arguments");
+		ret = parseredirs(ret, ps, es);
+	}
+	cmd->argv[i] = 0;
+	cmd->eargv[i] = 0;
+	return (ret);
 }
