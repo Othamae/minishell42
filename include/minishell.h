@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/22 13:15:46 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/23 15:05:04 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es);
 
 // parse_utils
 t_cmd	*handle_parseredirs(t_cmd *cmd, char *q, char *eq, int tok);
-t_cmd	*handle_exec(char **ps, char *es, t_exec *cmd, t_cmd *ret);
+t_cmd	*handle_parseexec(char **ps, char *es, t_exec *cmd, t_cmd *ret);
 
 // nulterminate
 t_cmd	*nulterminate(t_cmd *cmd);
@@ -145,5 +145,6 @@ int		handle_pipe(t_pipe *pcmd);
 void	handle_redir(t_redir *rcmd);
 void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left);
 void	handle_and_or(t_clist *lcmd, int *status);
+void	handle_exec(t_exec *ecmd);
 
 #endif
