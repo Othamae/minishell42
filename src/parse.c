@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/23 15:04:45 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/23 20:19:29 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_cmd	*parseline(char **ps, char *es)
 	if (find_next_token(ps, es, "("))
 	{
 		get_token(ps, es, 0, 0);
-		cmd = parseline(ps, es);
+		cmd = subshellcmd(parseline(ps, es));
 		if (find_next_token(ps, es, ")"))
 			get_token(ps, es, 0, 0);
 		else
