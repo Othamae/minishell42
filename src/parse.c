@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/22 10:02:33 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/23 15:04:45 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_cmd	*parseexec(char **ps, char *es)
 	ret = execcmd();
 	cmd = (t_exec *)ret;
 	ret = parseredirs(ret, ps, es);
-	ret = handle_exec(ps, es, cmd, ret);
+	ret = handle_parseexec(ps, es, cmd, ret);
 	return (ret);
 }
 
