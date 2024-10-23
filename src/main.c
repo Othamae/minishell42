@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/13 18:51:11 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/23 20:45:08 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ int	getcmd(char *buff, int nbuf)
 	input = readline(PROMPT);
 	if (!input)
 		return (-1);
+	if (input[0] == 0)
+	{
+		free(input);
+		return (0);
+	}
 	ft_strlcpy(buff, input, nbuf);
 	if (buff[0] == 0)
 		return (-1);
@@ -29,28 +34,29 @@ int	getcmd(char *buff, int nbuf)
 
 void	runcmd(t_cmd *cmd)
 {
-	extern char	**environ;
-	t_exec		*ecmd;
+	int	status;
 
 	if (cmd == 0)
 		exit(1);
+	status = 0;
 	if (cmd->type == EXEC_T)
-	{
-		ecmd = (t_exec *)cmd;
-		if (ecmd->argv[0] == 0)
-			exit(1);
-		execve(ecmd->argv[0], ecmd->argv, environ);
-		printf("exec %s failed\n", ecmd->argv[0]);
-	}
+		handle_exec((t_exec *)cmd);
 	else if (cmd->type == REDIR_T)
 		handle_redir((t_redir *)cmd);
 	else if (cmd->type == PIPE_T)
-		handle_pipe((t_pipe *)cmd);
+	{
+		status = handle_pipe((t_pipe *)cmd);
+		exit(status);
+	}
 	else if (cmd->type == HERDOC_T)
 		handle_herdoc((t_herdoc *)cmd);
+	else if (cmd->type == AND_T || cmd->type == OR_T)
+		handle_and_or((t_clist *)cmd, &status);
+	else if (cmd->type == SUBSHELL_T)
+		handle_subshell((t_subshell *)cmd, &status);
 	else
 		exit_error("runcmd error");
-	exit(0);
+	exit(WEXITSTATUS(status));
 }
 
 int	main(void)
