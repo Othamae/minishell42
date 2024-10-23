@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 13:01:50 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/23 20:15:14 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/23 20:45:41 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,19 @@ void	handle_and_or(t_clist *lcmd, int *status)
 				runcmd(lcmd->right);
 			wait(0);
 		}
+	}
+}
+
+void	handle_subshell(t_subshell *subcmd, int *status)
+{
+	if (fork1() == 0)
+	{
+		runcmd(subcmd->subcmd);
+		exit(0);
+	}
+	else
+	{
+		wait(status);
+		WEXITSTATUS(*status);
 	}
 }
