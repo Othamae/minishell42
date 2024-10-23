@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:32:44 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/20 21:20:53 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/23 20:18:12 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ static void	handle_nul_herdoc(t_cmd *cmd)
 
 t_cmd	*nulterminate(t_cmd *cmd)
 {
-	t_clist	*clistcmd;
+	t_clist		*clistcmd;
+	t_subshell	*subcmd;
 
 	if (cmd == 0)
 		return (0);
@@ -71,6 +72,11 @@ t_cmd	*nulterminate(t_cmd *cmd)
 		clistcmd = (t_clist *)cmd;
 		nulterminate(clistcmd->left);
 		nulterminate(clistcmd->right);
+	}
+	else if (cmd->type == SUBSHELL_T)
+	{
+		subcmd = (t_subshell *)cmd;
+		nulterminate(subcmd->subcmd);
 	}
 	return (cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/23 15:05:04 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/23 17:56:02 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ typedef struct s_clist
 typedef struct s_subshell
 {
 	t_cmd	base;
-	t_cmd	*cmd;
+	t_cmd	*subcmd;
 }	t_subshell;
 
 //utils.c
@@ -125,6 +125,7 @@ t_cmd	*pipecmd(t_cmd *left, t_cmd *right);
 t_cmd	*redircmd(t_cmd *subcmd, char *file, char *efile, t_redir_info info);
 t_cmd	*heredoccmd(char *delim, t_cmd *subcmd);
 t_cmd	*listcmd(t_cmd *left, t_cmd *right, int type);
+t_cmd	*subshellcmd(t_cmd *subcmd);
 
 // token
 int		find_next_token(char **ps, char *es, char *tokens);
