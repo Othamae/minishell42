@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 19:44:08 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/20 20:11:02 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/23 17:54:09 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,3 @@ t_cmd	*listcmd(t_cmd *left, t_cmd *right, int type)
 	cmd->right = right;
 	return ((t_cmd *)cmd);
 }
-
-// t_cmd *subshellcmd(t_cmd *subcmd) 
-// {
-//     t_subshell *cmd;
-
-//     cmd = malloc(sizeof(*cmd));
-//     ft_memset(cmd, 0, sizeof(*cmd));
-//     cmd->base.type = SUBSHELL_T;
-//     cmd->cmd = subcmd;
-//     return ((t_cmd *)cmd);
-// }
