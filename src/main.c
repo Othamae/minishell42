@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/23 20:45:08 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:40:43 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,20 @@ int	main(void)
 		}
 		fd = open(PROMPT, O_RDWR);
 	}
-	while ((getcmd(buff, sizeof(buff)) >= 0))
+	handle_signals();
+	while (1)
 	{
-		add_history(buff);
-		if (do_builtins(buff))
-			continue ;
-		if (fork1() == 0)
+		while ((getcmd(buff, sizeof(buff)) >= 0))
 		{
-			runcmd(parsecmd(buff));
+			add_history(buff);
+			if (do_builtins(buff))
+				continue ;
+			if (fork1() == 0)
+			{
+				runcmd(parsecmd(buff));
+			}
+			wait(0);
 		}
-		wait(0);
 	}
 	exit(1);
 }

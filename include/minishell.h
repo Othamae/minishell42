@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/23 20:43:04 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:33:26 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
-# include <linux/limits.h>
+# include <signal.h>
+#include <glob.h>
+// # include <linux/limits.h>
 
 # define EXEC_T 1
 # define REDIR_T 2
