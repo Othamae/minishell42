@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/19 11:05:49 by mac              ###   ########.fr       */
+/*   Updated: 2024/10/24 21:05:50 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,9 +194,9 @@ int vash_echo(char **args)
 
 int		ft_pwd(void)
 {
-	char	cwd[PATH_MAX]; //4096
+	char	cwd[4096]; //4096
 
-	if (getcwd(cwd, PATH_MAX))
+	if (getcwd(cwd, 4096))
 	{
 		printf("%s\n", cwd);
 		return (1);
