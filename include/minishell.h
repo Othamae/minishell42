@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/24 20:33:26 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/24 20:47:30 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <signal.h>
-#include <glob.h>
+# include <glob.h>
 // # include <linux/limits.h>
 
 # define EXEC_T 1
@@ -150,5 +150,8 @@ void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left);
 void	handle_and_or(t_clist *lcmd, int *status);
 void	handle_exec(t_exec *ecmd);
 void	handle_subshell(t_subshell *subcmd, int *status);
+
+// signal
+void	handle_signals(void);
 
 #endif
