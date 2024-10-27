@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/24 20:48:36 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/27 21:07:21 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	runcmd(t_cmd *cmd)
 		exit(1);
 	status = 0;
 	if (cmd->type == EXEC_T)
-		handle_exec((t_exec *)cmd);
+		status = handle_exec((t_exec *)cmd);
 	else if (cmd->type == REDIR_T)
 		handle_redir((t_redir *)cmd);
 	else if (cmd->type == PIPE_T)
@@ -56,7 +56,7 @@ void	runcmd(t_cmd *cmd)
 		handle_subshell((t_subshell *)cmd, &status);
 	else
 		exit_error("runcmd error");
-	exit(WEXITSTATUS(status));
+	exit(status);
 }
 
 int	main(void)
