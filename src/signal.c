@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 23:19:05 by mac               #+#    #+#             */
-/*   Updated: 2024/10/24 21:00:22 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/26 20:45:16 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ void	handle_signals(void)
 	struct sigaction	sa_eof;
 	struct sigaction	sa_quit;
 
+	ft_memset(&sa_int, 0, sizeof(sa_int));
+	ft_memset(&sa_eof, 0, sizeof(sa_eof));
+	ft_memset(&sa_quit, 0, sizeof(sa_quit));
 	sa_int.sa_handler = &handle_sigint;
 	sa_eof.sa_handler = &handle_eof;
 	sa_quit.sa_handler = &handle_sigquit;
