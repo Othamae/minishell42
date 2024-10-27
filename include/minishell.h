@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/24 20:47:30 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/10/26 16:59:22 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int		vash_pwd(void);
 int		vash_env(void);
 int		vash_launch(char **argv);
 int		do_builtins(char *line);
+int		handle_builtins(char **args);
 
 // exec
 void	runcmd(t_cmd *cmd);
