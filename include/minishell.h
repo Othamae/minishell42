@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/27 21:06:45 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/02 17:18:50 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
 
 # define WHITESPACE " \t\r\n\v"
-# define SYMBOLS "<|>&()"
+# define SYMBOLS "<|>&()\""
 # define PERMISSIONS 0664
 
 # define PIPE '|'
@@ -51,6 +51,7 @@
 # define OR	'o'
 # define OPEN_P '('
 # define CLOSE_P ')'
+# define D_QUOTE '"'
 
 typedef struct s_cmd
 {
@@ -109,6 +110,8 @@ typedef struct s_subshell
 //utils.c
 int		fork1(void);
 void	exit_error(char *s);
+int		count_char(const char *str, char c);
+char	*ft_strstr(const char *haystack, const char *needle);
 
 // parse
 t_cmd	*parsecmd(char *s);
@@ -132,6 +135,9 @@ t_cmd	*subshellcmd(t_cmd *subcmd);
 // token
 int		find_next_token(char **ps, char *es, char *tokens);
 int		get_token(char **ps, char *es, char **q, char **eq);
+
+//token utils
+void	skip_whitespace(char **s, char *es);
 
 // builtins
 int		vash_echo(char **args);
