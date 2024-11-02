@@ -6,16 +6,24 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:11:55 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/20 19:26:44 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/02 17:17:48 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	skip_whitespace(char **s, char *es)
+static int	handle_quotes(char **s, char *es, char **q, char **eq)
 {
-	while (*s < es && ft_strchr(WHITESPACE, **s))
+	(*s)++;
+	if (q)
+		*q = *s;
+	while (*s < es && **s != '"')
 		(*s)++;
+	if (eq)
+		*eq = *s;
+	if (*s < es && **s == '"')
+		(*s)++;
+	return (D_QUOTE);
 }
 
 static int	handle_token(char **s, char c, int ret_value)
@@ -62,14 +70,17 @@ int	get_token(char **ps, char *es, char **q, char **eq)
 	ret = *s;
 	if (*s == 0)
 		return (0);
-	ret = handle_special_tokens(&s, *s);
+	if (*s == '"')
+		ret = handle_quotes(&s, es, q, eq);
+	else
+		ret = handle_special_tokens(&s, *s);
 	if (ret == -1)
 	{
 		ret = OTHER;
 		while (s < es && !ft_strchr(WHITESPACE, *s) && !ft_strchr(SYMBOLS, *s))
 			s++;
 	}
-	if (eq)
+	if (eq && **eq != '"')
 		*eq = s;
 	skip_whitespace(&s, es);
 	*ps = s;
