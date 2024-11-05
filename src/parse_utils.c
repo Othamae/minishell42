@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 20:11:51 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/23 15:06:00 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:30:59 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,10 @@ t_cmd	*handle_parseexec(char **ps, char *es, t_exec *cmd, t_cmd *ret)
 			break ;
 		if (token != OTHER)
 			exit_error("syntax error\n");
-		cmd->argv[i] = q;
+		else
+			cmd->argv[i] = q;
 		cmd->eargv[i] = eq;
 		i++;
-		if (i >= MAXARGS)
-			exit_error("Too many arguments");
 		ret = parseredirs(ret, ps, es);
 	}
 	cmd->argv[i] = 0;

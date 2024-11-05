@@ -6,17 +6,11 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:11:55 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/20 19:26:44 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:08:15 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static void	skip_whitespace(char **s, char *es)
-{
-	while (*s < es && ft_strchr(WHITESPACE, **s))
-		(*s)++;
-}
 
 static int	handle_token(char **s, char c, int ret_value)
 {
@@ -62,7 +56,8 @@ int	get_token(char **ps, char *es, char **q, char **eq)
 	ret = *s;
 	if (*s == 0)
 		return (0);
-	ret = handle_special_tokens(&s, *s);
+	else
+		ret = handle_special_tokens(&s, *s);
 	if (ret == -1)
 	{
 		ret = OTHER;

@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/27 10:53:34 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:05:55 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,6 @@
 
 // find the first occurrence of a substring within a string.
 // returns pointer to first character of the first occurrence of the substring
-char *ft_strstr(const char *haystack, const char *needle)
-{
-	if (*needle == '\0')
-		return (char *)haystack;
-	while (*haystack)
-	{
-		const char *h = haystack;
-		const char *n = needle;
-		while (*h && *n && *h == *n)
-		{
-			h++;
-			n++;
-		}
-		if (*n == '\0')
-			return (char *)haystack;
-
-		haystack++;
-	}
-	return NULL;
-}
-
-int count_char(const char *str, char c)
-{
-	int count = 0;
-	while (*str)
-	{
-		if (*str == c)
-			count++;
-		str++;
-	}
-	return count;
-}
-
 
 char *ft_strtok(char *str, const char *delim)
 {
