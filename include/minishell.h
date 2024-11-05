@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/02 17:18:50 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:31:06 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
 
 # define WHITESPACE " \t\r\n\v"
-# define SYMBOLS "<|>&()\""
+# define SYMBOLS "<|>&()"
 # define PERMISSIONS 0664
+# define MAX_BUFFER_SIZE 100
 
 # define PIPE '|'
 # define REDIR_FROM '<'
@@ -51,7 +52,6 @@
 # define OR	'o'
 # define OPEN_P '('
 # define CLOSE_P ')'
-# define D_QUOTE '"'
 
 typedef struct s_cmd
 {
@@ -112,6 +112,7 @@ int		fork1(void);
 void	exit_error(char *s);
 int		count_char(const char *str, char c);
 char	*ft_strstr(const char *haystack, const char *needle);
+int		has_unclosed_quotes(const char *s);
 
 // parse
 t_cmd	*parsecmd(char *s);
@@ -120,6 +121,9 @@ t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es);
 // parse_utils
 t_cmd	*handle_parseredirs(t_cmd *cmd, char *q, char *eq, int tok);
 t_cmd	*handle_parseexec(char **ps, char *es, t_exec *cmd, t_cmd *ret);
+
+// parse_utils_2
+void	handle_d_quotes(char *s, char **es);
 
 // nulterminate
 t_cmd	*nulterminate(t_cmd *cmd);
