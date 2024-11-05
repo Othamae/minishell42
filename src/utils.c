@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:05:10 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/05 20:04:57 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/05 20:14:49 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,16 @@ int	count_char(const char *str, char c)
 	return (count);
 }
 
-char	*mkcopy(char *q, char *eq)
+int	has_unclosed_quotes(const char *s)
 {
-	int		len;
-	char	*copy;
+	int	quote_count;
 
-	len = eq - q;
-	copy = malloc(len + 1);
-	if (!copy)
-		exit_error("memory allocation error");
-	ft_strlcpy(copy, q, len + 1);
-	copy[len] = '\0';
-	return (copy);
+	quote_count = 0;
+	while (*s)
+	{
+		if (*s == '"')
+			quote_count++;
+		s++;
+	}
+	return (quote_count % 2 != 0);
 }
