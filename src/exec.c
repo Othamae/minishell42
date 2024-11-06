@@ -6,11 +6,40 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:59:48 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/27 21:06:08 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/06 13:00:42 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	handle_path(char *s, char **argv, char **environ)
+{
+	char	*path_env;
+	char	*path_token;
+	char	f_path[MAX_PATH_LENGTH];
+	size_t	tok_len;
+	size_t	cmd_len;
+
+	path_env = getenv("PATH");
+	if (path_env == NULL)
+		exit_error("Error: PATH not configured\n");
+	path_token = ft_strtok(path_env, PATH_SEPARATOR);
+	while (path_token != NULL)
+	{
+		tok_len = ft_strlen(path_token);
+		cmd_len = ft_strlen(s);
+		if (tok_len + 1 + cmd_len < MAX_PATH_LENGTH)
+		{
+			ft_strlcpy(f_path, path_token, MAX_PATH_LENGTH);
+			f_path[tok_len] = '/';
+			f_path[tok_len + 1] = '\0';
+			ft_strlcpy(f_path + tok_len + 1, s, MAX_PATH_LENGTH - tok_len - 1);
+			execve(f_path, argv, environ);
+		}
+		path_token = ft_strtok(NULL, PATH_SEPARATOR);
+	}
+	return (-1);
+}
 
 int	handle_exec(t_exec *ecmd)
 {
@@ -20,8 +49,11 @@ int	handle_exec(t_exec *ecmd)
 		return (0);
 	if (ecmd->argv[0] == 0)
 		return (1);
-	execve(ecmd->argv[0], ecmd->argv, environ);
-	printf("exec %s failed\n", ecmd->argv[0]);
+	if (ft_strchr(ecmd->argv[0], '/') != NULL)
+		execve(ecmd->argv[0], ecmd->argv, environ);
+	else
+		handle_path(ecmd->argv[0], ecmd->argv, environ);
+	fprintf(stderr, "exec %s failed\n", ecmd->argv[0]);
 	exit(1);
 	return (1);
 }
