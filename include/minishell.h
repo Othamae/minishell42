@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 12:46:20 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:00:29 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <glob.h>
+# include <termios.h>
 // # include <linux/limits.h>
 
 # define EXEC_T 1

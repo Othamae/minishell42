@@ -6,11 +6,13 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 12:49:27 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:11:36 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+
 
 int	vash_launch(char **argv)
 {
@@ -39,8 +41,30 @@ int	vash_launch(char **argv)
 
 int vash_cd(char **args)
 {
-	chdir(args[1]);
-	return (0);
+	char *path;
+	char cwd[1024];
+
+	if (args[1] == NULL)
+	{
+		path = getenv("HOME");
+		if (path == NULL)
+		{
+			perror("error: cd");
+			return -1;
+		}
+	}
+	else
+		path = args[1];
+	if (chdir(path) != 0)
+	{
+		perror("error: cd");
+		return -1;
+	}
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		;
+	else
+		perror("Minishell: cd: no such file or directory");
+	return 0;
 }
 
 int vash_echo(char **args)
@@ -56,7 +80,7 @@ int vash_echo(char **args)
 		printf("\n");
 		return 0;
 	}
-	if (ft_strncmp(args[1], "-n", 3) == 0)
+	if (strncmp(args[1], "-n", 3) == 0)
 	{
 		no_newline = 1;
 		i++;
@@ -65,9 +89,80 @@ int vash_echo(char **args)
 	while (args[i] != NULL)
 	{
 		int k = 0;
-		while (args[i][k] != '\0')
+		if ((args[i][0] == '$') || (args[i][1] == '$'
+			&& (args[i][0] == 34 && (args[i][ft_strlen (args[i]) - 1] == 34)))
+			|| (args[i][2] == '$' && (args[i][0] == 34 && (args[i][ft_strlen (args[i]) - 1] == 34))))
 		{
-			old_str[j++] = args[i][k++];
+			if (args[i][0] == '$')
+			{
+				char *env_var_name = args[i] + 1;
+				char *env_var_value = getenv(env_var_name);
+				if (env_var_value)
+				{
+					int l = 0;
+					while (env_var_value[l] != '\0')
+						old_str[j++] = env_var_value[l++];
+				}
+				else
+				{
+					while (args[i][k] != '\0')
+						old_str[j++] = args[i][k++];
+				}
+			}
+			else if (args[i][1] == '$'
+			&& (args[i][0] == 34 && (args[i][ft_strlen (args[i]) - 1] == 34)))
+			{
+				char *env_var_name = args[i] + 2;
+				env_var_name[strlen(env_var_name) - 1] = '\0';
+
+				char *env_var_value = getenv(env_var_name);
+				if (env_var_value)
+				{
+					int l = 0;
+					while (env_var_value[l] != '\0')
+						old_str[j++] = env_var_value[l++];
+				}
+				else
+				{
+					old_str[j++] = '"';
+					while (args[i][k] != '\0')
+						old_str[j++] = args[i][k++];
+					old_str[j++] = '"';
+				}
+			}
+			else
+			{
+				char *env_var_name = args[i] + 3;
+				env_var_name[strlen(env_var_name) - 2] = '\0';
+
+				char *env_var_value = getenv(env_var_name);
+				if (env_var_value)
+				{
+					int l = 0;
+					while (env_var_value[l] != '\0')
+					{
+						old_str[j++] = env_var_value[l++];
+						old_str[j] = '\0';
+						write (1, "'", 1);
+						write (1, old_str, ft_strlen(old_str));
+						write (1, "'\n", 2);
+						return (0);
+
+					}
+				}
+				else
+				{
+					old_str[j++] = '"';
+					while (args[i][k] != '\0')
+						old_str[j++] = args[i][k++];
+					old_str[j] = '"';
+				}
+			}
+		}
+		else
+		{
+			while (args[i][k] != '\0')
+				old_str[j++] = args[i][k++];
 		}
 		if (args[i + 1] != NULL)
 			old_str[j++] = ' ';
@@ -79,26 +174,27 @@ int vash_echo(char **args)
 	if (old_str[j] == '\0')
 	{
 		if (no_newline)
-			printf("%s", " ");
+			;
 		else
 			printf("\n");
 		return (0);
 	}
-	new_str = (char *)malloc(ft_strlen(old_str) + 1);
+	new_str = (char *)malloc(strlen(old_str) + 1);
 	if (new_str == NULL)
 	{
 		printf("error allocating new string");
 		return (0);
 	}
-	if ((old_str[0] == 34 && old_str[ft_strlen(old_str) - 1] == 34) ||
-		(old_str[0] == 39 && old_str[ft_strlen(old_str) - 1] == 39))
+	if ((old_str[0] == 34 && old_str[strlen(old_str) - 1] == 34) ||
+		(old_str[0] == 39 && old_str[strlen(old_str) - 1] == 39))
 	{
-		while (old_str[i] != old_str[ft_strlen(old_str) - 1])
+		while (old_str[i] != old_str[strlen(old_str) - 1])
 			new_str[j++] = old_str[i++];
 		new_str[j] = '\0';
 	}
 	else
-		new_str = old_str;
+		strcpy(new_str, old_str);
+
 	if (no_newline)
 		printf("%s", new_str);
 	else
@@ -313,40 +409,30 @@ int do_builtins(char *buff)
 	return (1);
 }
 
-int handle_builtins(char **args) 
+int handle_builtins(char **args)
 {
-    if (args[0] == NULL) {
-        return 0;
-    }
-
-    if (ft_strncmp(args[0], "exit", 5) == 0) {
-        exit(0);
-    }
-    else if (ft_strncmp(args[0], "cd", 3) == 0) {
-        vash_cd(args);
-    }
-    else if (ft_strncmp(args[0], "echo", 5) == 0) {
-        vash_echo(args);
-    }
-    else if (ft_strncmp(args[0], "pwd", 4) == 0) {
-        ft_pwd();
-    }
-    else if (ft_strncmp(args[0], "env", 4) == 0) {
-        vash_env();
-    }
-    else if (ft_strncmp(args[0], "export", 7) == 0 || ft_strncmp(args[0], "setenv", 7) == 0) {
-        if (args[1] == NULL && ft_strncmp(args[0], "setenv", 7) != 0) {
-            vash_env();
-        }
-        else {
-            vash_export(args);
-        }
-    }
-    else if (ft_strncmp(args[0], "unset", 6) == 0 || ft_strncmp(args[0], "unsetenv", 9) == 0) {
-        vash_unset(args);
-    }
-    else {
-        return 0;
-    }
-    return 1;
+	if (args[0] == NULL)
+		return 0;
+	if (ft_strncmp(args[0], "exit", 5) == 0)
+		exit(0);
+	else if (ft_strncmp(args[0], "cd", 3) == 0)
+		vash_cd(args);
+	else if (ft_strncmp(args[0], "echo", 5) == 0)
+		vash_echo(args);
+	else if (ft_strncmp(args[0], "pwd", 4) == 0)
+		ft_pwd();
+	else if (ft_strncmp(args[0], "env", 4) == 0)
+		vash_env();
+	else if (ft_strncmp(args[0], "export", 7) == 0 || ft_strncmp(args[0], "setenv", 7) == 0)
+	{
+		if (args[1] == NULL && ft_strncmp(args[0], "setenv", 7) != 0)
+			vash_env();
+		else
+			vash_export(args);
+	}
+	else if (ft_strncmp(args[0], "unset", 6) == 0 || ft_strncmp(args[0], "unsetenv", 9) == 0)
+		vash_unset(args);
+	else
+		return (0);
+	return (1);
 }
