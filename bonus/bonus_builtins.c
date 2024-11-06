@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 10:54:10 by mac               #+#    #+#             */
-/*   Updated: 2024/10/24 21:08:57 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:30:43 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,49 +48,6 @@ int count_char(const char *str, char c)
 }
 
 
-char *ft_strtok(char *str, const char *delim)
-{
-	static char	*saved_str = NULL;
-	char		*token;
-	int			i = 0;
-	int			start = 0;
-	int			in_quote = 0;
-
-	if (str != NULL)
-		saved_str = str;
-	if (saved_str == NULL)
-		return (NULL);
-	while (saved_str[start] != '\0' && ft_strchr(delim, saved_str[start]) != NULL)
-		start++;
-
-	i = start;
-	while (saved_str[i] != '\0')
-	{
-		if (saved_str[i] == '"' || saved_str[i] == '\'')
-		{
-			if (in_quote == 0)
-				in_quote = saved_str[i];
-			else if (in_quote == saved_str[i])
-				in_quote = 0;
-		}
-		else if (ft_strchr(delim, saved_str[i]) != NULL && in_quote == 0)
-		{
-			break;
-		}
-		i++;
-	}
-	token = &saved_str[start];
-	if (saved_str[i] != '\0')
-	{
-		saved_str[i] = '\0';
-		saved_str = &saved_str[i + 1];
-	}
-	else
-	{
-		saved_str = NULL;
-	}
-	return (token);
-}
 
 
 int	vash_launch(char **argv)
