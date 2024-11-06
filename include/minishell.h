@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/05 20:31:06 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/06 10:00:08 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define MAXARGS 10
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
 
-# define WHITESPACE " \t\r\n\v"
+# define WHITESPACE " \t\r\v"
 # define SYMBOLS "<|>&()"
 # define PERMISSIONS 0664
 # define MAX_BUFFER_SIZE 100
