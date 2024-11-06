@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 10:00:08 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/06 12:46:20 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 # define SYMBOLS "<|>&()"
 # define PERMISSIONS 0664
 # define MAX_BUFFER_SIZE 100
+# define PATH_SEPARATOR ":"
+# define MAX_PATH_LENGTH 512
 
 # define PIPE '|'
 # define REDIR_FROM '<'
@@ -113,6 +115,9 @@ void	exit_error(char *s);
 int		count_char(const char *str, char c);
 char	*ft_strstr(const char *haystack, const char *needle);
 int		has_unclosed_quotes(const char *s);
+
+// utils_2.c
+char	*ft_strtok(char *str, const char *delim);
 
 // parse
 t_cmd	*parsecmd(char *s);
