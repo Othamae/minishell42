@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/09 20:07:28 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/09 21:33:49 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,9 @@ void	handle_env_var(char *arg, char *old_str, int *j);
 
 // export_env_utils.c
 void	print_sorted_env(char **environ);
+char	**copy_environ(char **environ, int *count);
+char	**expand_environ(char **environ, int size, int *count);
+int		ft_setenv(char *name, char *value, char ***environ);
 
 // ft_qsort
 int		compare_strings(const void *a, const void *b);
