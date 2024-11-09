@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 15:00:29 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/06 20:47:56 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,11 @@ typedef struct s_subshell
 	t_cmd	*subcmd;
 }	t_subshell;
 
+typedef struct s_context
+{
+	int	last_status;
+}	t_context;
+
 //utils.c
 int		fork1(void);
 void	exit_error(char *s);
@@ -150,23 +155,23 @@ int		get_token(char **ps, char *es, char **q, char **eq);
 void	skip_whitespace(char **s, char *es);
 
 // builtins
-int		vash_echo(char **args);
+int		vash_echo(char **args, t_context *context);
 int		vash_cd(char **args);
 int		vash_pwd(void);
 int		vash_env(void);
 int		vash_launch(char **argv);
 int		do_builtins(char *line);
-int		handle_builtins(char **args);
+int		handle_builtins(char **args, t_context *context);
 
 // exec
-void	runcmd(t_cmd *cmd);
-void	handle_herdoc(t_herdoc *hcmd);
-int		handle_pipe(t_pipe *pcmd);
-void	handle_redir(t_redir *rcmd);
-void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left);
-void	handle_and_or(t_clist *lcmd, int *status);
-int		handle_exec(t_exec *ecmd);
-void	handle_subshell(t_subshell *subcmd, int *status);
+void	runcmd(t_cmd *cmd, t_context *context);
+void	handle_herdoc(t_herdoc *hcmd, t_context *context);
+int		handle_pipe(t_pipe *pcmd, t_context *context);
+void	handle_redir(t_redir *rcmd, t_context *context);
+void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left, t_context *context);
+void	handle_and_or(t_clist *lcmd, int *status, t_context *context);
+int		handle_exec(t_exec *ecmd, t_context *context);
+void	handle_subshell(t_subshell *subcmd, int *status, t_context *context);
 
 // signal
 void	handle_signals(void);

@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/27 21:07:21 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/09 11:34:37 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	getcmd(char *buff, int nbuf)
 	return (0);
 }
 
-void	runcmd(t_cmd *cmd)
+void	runcmd(t_cmd *cmd, t_context *context)
 {
 	int	status;
 
@@ -40,29 +40,29 @@ void	runcmd(t_cmd *cmd)
 		exit(1);
 	status = 0;
 	if (cmd->type == EXEC_T)
-		status = handle_exec((t_exec *)cmd);
+		status = handle_exec((t_exec *)cmd, context);
 	else if (cmd->type == REDIR_T)
-		handle_redir((t_redir *)cmd);
+		handle_redir((t_redir *)cmd, context);
 	else if (cmd->type == PIPE_T)
 	{
-		status = handle_pipe((t_pipe *)cmd);
+		status = handle_pipe((t_pipe *)cmd, context);
 		exit(status);
 	}
 	else if (cmd->type == HERDOC_T)
-		handle_herdoc((t_herdoc *)cmd);
+		handle_herdoc((t_herdoc *)cmd, context);
 	else if (cmd->type == AND_T || cmd->type == OR_T)
-		handle_and_or((t_clist *)cmd, &status);
+		handle_and_or((t_clist *)cmd, &status, context);
 	else if (cmd->type == SUBSHELL_T)
-		handle_subshell((t_subshell *)cmd, &status);
+		handle_subshell((t_subshell *)cmd, &status, context);
 	else
 		exit_error("runcmd error");
-	exit(status);
+	context->last_status = WEXITSTATUS(status);
+	exit(context->last_status);
 }
 
-int	main(void)
+static void	initialize_fd(void)
 {
-	static char	buff[100];
-	int			fd;
+	int	fd;
 
 	fd = open(PROMPT, O_RDWR);
 	while (fd >= 0)
@@ -74,6 +74,15 @@ int	main(void)
 		}
 		fd = open(PROMPT, O_RDWR);
 	}
+}
+
+int	main(void)
+{
+	static char	buff[100];
+	t_context	context;
+
+	context.last_status = 0;
+	initialize_fd();
 	handle_signals();
 	while ((getcmd(buff, sizeof(buff)) >= 0))
 	{
@@ -81,8 +90,9 @@ int	main(void)
 		if (do_builtins(buff))
 			continue ;
 		if (fork1() == 0)
-			runcmd(parsecmd(buff));
-		wait(0);
+			runcmd(parsecmd(buff), &context);
+		wait(&context.last_status);
+		context.last_status = WEXITSTATUS(context.last_status);
 	}
 	exit(1);
 }

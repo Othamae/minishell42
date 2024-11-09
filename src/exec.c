@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:59:48 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 13:00:42 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/09 11:24:35 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,23 @@ int	handle_path(char *s, char **argv, char **environ)
 	return (-1);
 }
 
-int	handle_exec(t_exec *ecmd)
+int	handle_exec(t_exec *ecmd, t_context *context)
 {
 	extern char	**environ;
 
-	if (handle_builtins(ecmd->argv))
+	if (handle_builtins(ecmd->argv, context))
 		return (0);
 	if (ecmd->argv[0] == 0)
+	{
+		context->last_status = 1;
 		return (1);
+	}
 	if (ft_strchr(ecmd->argv[0], '/') != NULL)
 		execve(ecmd->argv[0], ecmd->argv, environ);
 	else
 		handle_path(ecmd->argv[0], ecmd->argv, environ);
-	fprintf(stderr, "exec %s failed\n", ecmd->argv[0]);
-	exit(1);
-	return (1);
+	ft_printf("exec %s failed\n", ecmd->argv[0]);
+	context->last_status = 127;
+	exit(context->last_status);
+	return (context->last_status);
 }

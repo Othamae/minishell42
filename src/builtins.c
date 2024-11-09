@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 15:11:36 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/08 19:16:26 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int vash_cd(char **args)
 	return 0;
 }
 
-int vash_echo(char **args)
+int vash_echo(char **args, t_context *context)
 {
 	char old_str[1024];
 	int i = 1;
@@ -86,8 +86,15 @@ int vash_echo(char **args)
 		i++;
 	}
 
+	if (ft_strncmp(args[1], "$?", 3) == 0)
+	{
+		ft_printf("%d\n", context->last_status);
+		exit(0);
+	}
+
 	while (args[i] != NULL)
 	{
+
 		int k = 0;
 		if ((args[i][0] == '$') || (args[i][1] == '$'
 			&& (args[i][0] == 34 && (args[i][ft_strlen (args[i]) - 1] == 34)))
@@ -409,7 +416,7 @@ int do_builtins(char *buff)
 	return (1);
 }
 
-int handle_builtins(char **args)
+int handle_builtins(char **args, t_context *context)
 {
 	if (args[0] == NULL)
 		return 0;
@@ -418,7 +425,7 @@ int handle_builtins(char **args)
 	else if (ft_strncmp(args[0], "cd", 3) == 0)
 		vash_cd(args);
 	else if (ft_strncmp(args[0], "echo", 5) == 0)
-		vash_echo(args);
+		vash_echo(args, context);
 	else if (ft_strncmp(args[0], "pwd", 4) == 0)
 		ft_pwd();
 	else if (ft_strncmp(args[0], "env", 4) == 0)
@@ -434,5 +441,6 @@ int handle_builtins(char **args)
 		vash_unset(args);
 	else
 		return (0);
+	context->last_status = 1;
 	return (1);
 }
