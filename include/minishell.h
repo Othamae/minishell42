@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/09 13:01:15 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/09 20:07:28 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,14 @@ typedef struct s_context
 	int	last_status;
 }	t_context;
 
+typedef struct s_qsort
+{
+	char	*array;
+	char	*left;
+	char	*right;
+	char	*pivot;
+}	t_qsort;
+
 //utils.c
 int		fork1(void);
 void	exit_error(char *s);
@@ -188,5 +196,13 @@ int		handle_null(int no_newline);
 void	handle_single_quoted_env_var(char *arg, char *old_str, int *j);
 void	handle_double_quoted_env_var(char *arg, char *old_str, int *j);
 void	handle_env_var(char *arg, char *old_str, int *j);
+
+// export_env_utils.c
+void	print_sorted_env(char **environ);
+
+// ft_qsort
+int		compare_strings(const void *a, const void *b);
+void	ft_qsort(void *base, size_t nitems, size_t size,
+			int (*compar)(const void *, const void *));
 
 #endif
