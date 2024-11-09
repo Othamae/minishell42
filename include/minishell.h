@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 20:47:56 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/09 13:01:15 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,9 @@ int		vash_env(void);
 int		vash_launch(char **argv);
 int		do_builtins(char *line);
 int		handle_builtins(char **args, t_context *context);
+int		ft_pwd(void);
+int		vash_unset(char **args);
+int		vash_export(char **args);
 
 // exec
 void	runcmd(t_cmd *cmd, t_context *context);
@@ -175,5 +178,15 @@ void	handle_subshell(t_subshell *subcmd, int *status, t_context *context);
 
 // signal
 void	handle_signals(void);
+
+// echo
+int		process_args(char *old_str, int no_newline);
+int		handle_no_args(char **args);
+void	*safe_malloc(size_t bytes);
+void	print_str(char *old_str, char *new_str, int no_newline);
+int		handle_null(int no_newline);
+void	handle_single_quoted_env_var(char *arg, char *old_str, int *j);
+void	handle_double_quoted_env_var(char *arg, char *old_str, int *j);
+void	handle_env_var(char *arg, char *old_str, int *j);
 
 #endif
