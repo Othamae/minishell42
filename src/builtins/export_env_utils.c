@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 16:04:54 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/10 14:25:30 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:07:54 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ int	edit_variable(char *name, char *new_var, char ***env_copy)
 	while ((*env_copy)[i] != NULL)
 	{
 		if (ft_strncmp((*env_copy)[i], name, ft_strlen(name)) == 0 &&
-			(*env_copy)[i][ft_strlen(name)] == '=')
+			((*env_copy)[i][ft_strlen(name)] == '='
+				|| !(*env_copy)[i][ft_strlen(name)]))
 		{
 			free((*env_copy)[i]);
 			(*env_copy)[i] = new_var;

@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:16:09 by mac               #+#    #+#             */
-/*   Updated: 2024/11/09 12:20:09 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:08:19 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	vash_env(void)
 	env = environ;
 	while (*env)
 	{
-		printf("%s\n", *env);
+		if (ft_strchr(*env, '='))
+			printf("%s\n", *env);
 		env++;
 	}
 	return (0);
@@ -36,7 +37,8 @@ static void	remove_env_var(char **environ, char *arg)
 	len = ft_strlen(arg);
 	while (environ[i] != NULL)
 	{
-		if (ft_strncmp(environ[i], arg, len) == 0 && environ[i][len] == '=')
+		if (ft_strncmp(environ[i], arg, len) == 0
+			&& (environ[i][len] == '=' || !environ[i][len]))
 		{
 			j = i;
 			while (environ[j] != NULL)
