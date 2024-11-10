@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:23:19 by mac               #+#    #+#             */
-/*   Updated: 2024/11/09 13:00:16 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/10 14:27:52 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,24 @@ static int	validate_input(char *arg)
 
 static int	update_existing_env_var(char **environ, char *name)
 {
-	int	i;
+	int		i;
+	size_t	name_len;
 
+	name_len = ft_strlen(name);
 	i = 0;
 	while (environ[i] != NULL)
 	{
-		if (strncmp(environ[i], name, strlen(name)) == 0
-			&& environ[i][strlen(name)] == '=')
+		if (ft_strncmp(environ[i], name, name_len) == 0
+			&& environ[i][name_len] == '=')
 		{
-			environ[i] = malloc(strlen(name) + 1);
+			free(environ[i]);
+			environ[i] = malloc(name_len + 2);
 			if (!environ[i])
 			{
 				perror("Error: memory allocation failed");
 				return (1);
 			}
-			strcpy(environ[i], name);
+			ft_strlcpy(environ[i], name, name_len + 1);
 			return (0);
 		}
 		i++;
@@ -57,33 +60,29 @@ static int	add_new_env_var(char **environ, char *name)
 
 	i = 0;
 	while (environ[i] != NULL)
-	{
 		i++;
-	}
 	environ[i] = malloc(strlen(name) + 1);
 	if (!environ[i])
 	{
 		perror("Error: memory allocation failed");
 		return (1);
 	}
-	strcpy(environ[i], name);
+	ft_strlcpy(environ[i], name, strlen(name) + 1);
 	environ[i + 1] = NULL;
 	return (0);
 }
 
-static int	set_environment_variable(char **environ, char *name, char *value)
+static int	set_environment_variable(char ***environ, char *name, char *value)
 {
 	if (value == NULL)
 	{
-		if (update_existing_env_var(environ, name) == 0)
-		{
+		if (update_existing_env_var(*environ, name) == 0)
 			return (0);
-		}
-		return (add_new_env_var(environ, name));
+		return (add_new_env_var(*environ, name));
 	}
 	else
 	{
-		if (setenv(name, value, 1) != 0)
+		if (ft_setenv(name, value, environ) != 0)
 		{
 			perror("Error: failed to set environment variable");
 			return (1);
@@ -100,20 +99,21 @@ int	vash_export(char **args)
 	extern char	**environ;
 
 	if (args[1] == NULL)
-		vash_env();
+	{
+		print_sorted_env(environ);
+		return (0);
+	}
 	if (validate_input(args[1]))
 		return (1);
 	equal_sign = ft_strchr(args[1], '=');
 	if (equal_sign == NULL)
-	{
-		return (set_environment_variable(environ, args[1], "''"));
-	}
+		return (set_environment_variable(&environ, args[1], NULL));
 	else
 	{
 		*equal_sign = '\0';
 		name = args[1];
 		value = equal_sign + 1;
-		return (set_environment_variable(environ, name, value));
+		return (set_environment_variable(&environ, name, value));
 	}
 }
 
