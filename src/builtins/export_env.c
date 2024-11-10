@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:23:19 by mac               #+#    #+#             */
-/*   Updated: 2024/11/10 14:27:52 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:18:11 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	vash_export(char **args)
 	char		*value;
 	extern char	**environ;
 
-	if (args[1] == NULL)
+	if (args[1] == NULL || only_spaces(args[1]))
 	{
 		print_sorted_env(environ);
 		return (0);
