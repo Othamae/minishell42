@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:16:09 by mac               #+#    #+#             */
-/*   Updated: 2024/11/09 12:20:32 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:22:12 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	vash_cd(char **args)
 	char	*path;
 	char	cwd[1024];
 
-	if (args[1] == NULL)
+	if (args[1] == NULL || only_spaces(args[1]))
 	{
 		path = getenv("HOME");
 		if (path == NULL)
