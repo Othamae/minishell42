@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 16:04:54 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/09 21:33:00 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/10 14:25:30 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ char	**expand_environ(char **environ, int size, int *count)
 	env_copy = malloc(((*count) + size + 1) * sizeof(char *));
 	if (!env_copy)
 		return (NULL);
+	i = 0;
 	while (i < (*count))
 	{
 		env_copy[i] = environ[i];
@@ -112,7 +113,7 @@ int	ft_setenv(char *name, char *value, char ***environ)
 
 	len = ft_strlen(name) + ft_strlen(value) + 2;
 	env_copy = expand_environ(*environ, len, &count);
-	new_var = malloc(len);
+	new_var = (char *)malloc((sizeof(char) * len));
 	if (!new_var)
 		return (1);
 	ft_strlcpy(new_var, name, ft_strlen(name) + 1);
