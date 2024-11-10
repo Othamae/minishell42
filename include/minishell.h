@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/09 21:33:49 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:17:30 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int		has_unclosed_quotes(const char *s);
 
 // utils_2.c
 char	*ft_strtok(char *str, const char *delim);
+int		only_spaces(char *str);
 
 // parse
 t_cmd	*parsecmd(char *s);
