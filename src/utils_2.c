@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:27:10 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 14:29:57 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/10 15:20:22 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,16 @@ char	*ft_strtok(char *str, const char *delim)
 	else
 		svd_s = NULL;
 	return (token);
+}
+
+int	only_spaces(char *str)
+{
+	while (*str)
+	{
+		if (*str != ' ' && *str != '\t' && *str != '\n'
+			&& *str != '\v' && *str != '\f' && *str != '\r')
+			return (0);
+		str++;
+	}
+	return (1);
 }
