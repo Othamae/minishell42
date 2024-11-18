@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/10 15:17:30 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/18 20:40:05 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <signal.h>
 # include <glob.h>
 # include <termios.h>
+# include <dirent.h>
 // # include <linux/limits.h>
 
 # define EXEC_T 1
@@ -34,13 +35,13 @@
 # define OR_T 6
 # define SUBSHELL_T 7
 
-# define MAXARGS 10
+# define MAXARGS 50
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
 
 # define WHITESPACE " \t\r\v"
 # define SYMBOLS "<|>&()"
 # define PERMISSIONS 0664
-# define MAX_BUFFER_SIZE 100
+# define MAX_BUFFER_SIZE 256
 # define PATH_SEPARATOR ":"
 # define MAX_PATH_LENGTH 512
 
@@ -123,7 +124,14 @@ typedef struct s_qsort
 	char	*pivot;
 }	t_qsort;
 
-//utils.c
+typedef struct s_wildbuff
+{
+	char	*buffer;
+	size_t	len;
+	size_t	size;
+}	t_wildbuff;
+
+// utils.c
 int		fork1(void);
 void	exit_error(char *s);
 int		count_char(const char *str, char c);
@@ -208,5 +216,14 @@ int		ft_setenv(char *name, char *value, char ***environ);
 int		compare_strings(const void *a, const void *b);
 void	ft_qsort(void *base, size_t nitems, size_t size,
 			int (*compar)(const void *, const void *));
+
+// wildcards
+void	expand_wildcards_buff(char **ps, char **es);
+
+// wildcards_utils
+void	set_values(int *i, int i_value, int *j, int j_value);
+void	ensure_buffer_capacity(t_wildbuff *buf, size_t additional);
+void	finalize_buffer(t_wildbuff *buf);
+void	copy_literal_pattern(char *pattern, size_t patt_len, t_wildbuff *buf);
 
 #endif
