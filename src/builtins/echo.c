@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:00 by mac               #+#    #+#             */
-/*   Updated: 2024/11/09 12:29:03 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/18 18:40:14 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,25 @@ int	process_args(char *old_str, int no_newline)
 	return (0);
 }
 
+static void	echo_status(char **args, t_context *context)
+{
+	int	i;
+
+	i = 1;
+	while (args[i])
+	{
+		if (ft_strncmp(args[i], "$?", 3) == 0)
+			ft_printf("%d", context->last_status);
+		else
+			ft_printf("%s", args[i]);
+		if (args[i + 1] != NULL)
+			ft_printf(" ");
+		i++;
+	}
+	ft_printf("\n");
+	exit(0);
+}
+
 int	vash_echo(char **args, t_context *context)
 {
 	char	old_str[1024];
@@ -91,10 +110,7 @@ int	vash_echo(char **args, t_context *context)
 		i++;
 	}
 	if (ft_strncmp(args[1], "$?", 3) == 0)
-	{
-		ft_printf("%d\n", context->last_status);
-		exit(0);
-	}
+		echo_status(args, context);
 	process_arguments(args, old_str, &i, &j);
 	old_str[j] = '\0';
 	process_args(old_str, no_newline);
