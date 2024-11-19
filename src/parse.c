@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/05 20:28:05 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:16:34 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,15 @@ t_cmd	*parseline(char **ps, char *es)
 	return (cmd);
 }
 
-t_cmd	*parsecmd(char *s)
+t_cmd	*parsecmd(char *s, t_wildbuff *buf)
 {
-	char	*es;
-	t_cmd	*cmd;
+	char		*es;
+	t_cmd		*cmd;
 
 	es = s + (ft_strlen(s));
 	handle_d_quotes(s, &es);
+	if (ft_strchr(s, '*'))
+		expand_wildcards_buff(&s, &es, buf);
 	cmd = parseline(&s, es);
 	find_next_token(&s, es, "");
 	if (s != es)

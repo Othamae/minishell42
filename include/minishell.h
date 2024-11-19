@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/10 15:17:30 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:15:31 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <signal.h>
 # include <glob.h>
 # include <termios.h>
+# include <dirent.h>
 // # include <linux/limits.h>
 
 # define EXEC_T 1
@@ -34,13 +35,13 @@
 # define OR_T 6
 # define SUBSHELL_T 7
 
-# define MAXARGS 10
+# define MAXARGS 50
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
 
 # define WHITESPACE " \t\r\v"
 # define SYMBOLS "<|>&()"
 # define PERMISSIONS 0664
-# define MAX_BUFFER_SIZE 100
+# define MAX_BUFFER_SIZE 256
 # define PATH_SEPARATOR ":"
 # define MAX_PATH_LENGTH 512
 
@@ -61,11 +62,19 @@ typedef struct s_cmd
 	int	type;
 }	t_cmd;
 
+typedef struct s_wildbuff
+{
+	char	*buffer;
+	size_t	len;
+	size_t	size;
+}	t_wildbuff;
+
 typedef struct s_exec
 {
-	t_cmd	base;
-	char	*argv[MAXARGS];
-	char	*eargv[MAXARGS];
+	t_cmd		base;
+	char		*argv[MAXARGS];
+	char		*eargv[MAXARGS];
+	t_wildbuff	buff_exp;
 }	t_exec;
 
 typedef struct s_redir_info
@@ -123,7 +132,7 @@ typedef struct s_qsort
 	char	*pivot;
 }	t_qsort;
 
-//utils.c
+// utils.c
 int		fork1(void);
 void	exit_error(char *s);
 int		count_char(const char *str, char c);
@@ -135,7 +144,7 @@ char	*ft_strtok(char *str, const char *delim);
 int		only_spaces(char *str);
 
 // parse
-t_cmd	*parsecmd(char *s);
+t_cmd	*parsecmd(char *s, t_wildbuff *buf);
 t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es);
 
 // parse_utils
@@ -188,6 +197,9 @@ void	handle_subshell(t_subshell *subcmd, int *status, t_context *context);
 // signal
 void	handle_signals(void);
 
+// free_cmd
+void	free_cmd(t_cmd *cmd);
+
 // echo
 int		process_args(char *old_str, int no_newline);
 int		handle_no_args(char **args);
@@ -208,5 +220,14 @@ int		ft_setenv(char *name, char *value, char ***environ);
 int		compare_strings(const void *a, const void *b);
 void	ft_qsort(void *base, size_t nitems, size_t size,
 			int (*compar)(const void *, const void *));
+
+// wildcards
+void	expand_wildcards_buff(char **ps, char **es, t_wildbuff *buf);
+
+// wildcards_utils
+void	set_values(int *i, int i_value, int *j, int j_value);
+void	ensure_buffer_capacity(t_wildbuff *buf, size_t additional);
+void	finalize_buffer(t_wildbuff *buf);
+void	copy_literal_pattern(char *pattern, size_t patt_len, t_wildbuff *buf);
 
 #endif
