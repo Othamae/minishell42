@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/18 20:40:05 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/19 10:15:31 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,19 @@ typedef struct s_cmd
 	int	type;
 }	t_cmd;
 
+typedef struct s_wildbuff
+{
+	char	*buffer;
+	size_t	len;
+	size_t	size;
+}	t_wildbuff;
+
 typedef struct s_exec
 {
-	t_cmd	base;
-	char	*argv[MAXARGS];
-	char	*eargv[MAXARGS];
+	t_cmd		base;
+	char		*argv[MAXARGS];
+	char		*eargv[MAXARGS];
+	t_wildbuff	buff_exp;
 }	t_exec;
 
 typedef struct s_redir_info
@@ -124,13 +132,6 @@ typedef struct s_qsort
 	char	*pivot;
 }	t_qsort;
 
-typedef struct s_wildbuff
-{
-	char	*buffer;
-	size_t	len;
-	size_t	size;
-}	t_wildbuff;
-
 // utils.c
 int		fork1(void);
 void	exit_error(char *s);
@@ -143,7 +144,7 @@ char	*ft_strtok(char *str, const char *delim);
 int		only_spaces(char *str);
 
 // parse
-t_cmd	*parsecmd(char *s);
+t_cmd	*parsecmd(char *s, t_wildbuff *buf);
 t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es);
 
 // parse_utils
@@ -196,6 +197,9 @@ void	handle_subshell(t_subshell *subcmd, int *status, t_context *context);
 // signal
 void	handle_signals(void);
 
+// free_cmd
+void	free_cmd(t_cmd *cmd);
+
 // echo
 int		process_args(char *old_str, int no_newline);
 int		handle_no_args(char **args);
@@ -218,7 +222,7 @@ void	ft_qsort(void *base, size_t nitems, size_t size,
 			int (*compar)(const void *, const void *));
 
 // wildcards
-void	expand_wildcards_buff(char **ps, char **es);
+void	expand_wildcards_buff(char **ps, char **es, t_wildbuff *buf);
 
 // wildcards_utils
 void	set_values(int *i, int i_value, int *j, int j_value);
