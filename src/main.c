@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/09 11:34:37 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/19 09:20:02 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,12 @@ static void	initialize_fd(void)
 
 int	main(void)
 {
-	static char	buff[100];
+	static char	buff[MAX_BUFFER_SIZE];
 	t_context	context;
+	t_cmd		*cmd;
+	t_wildbuff	buf;
 
+	buf.buffer = NULL;
 	context.last_status = 0;
 	initialize_fd();
 	handle_signals();
@@ -89,10 +92,14 @@ int	main(void)
 		add_history(buff);
 		if (do_builtins(buff))
 			continue ;
+		cmd = parsecmd(buff, &buf);
 		if (fork1() == 0)
-			runcmd(parsecmd(buff), &context);
+			runcmd(cmd, &context);
 		wait(&context.last_status);
 		context.last_status = WEXITSTATUS(context.last_status);
+		free_cmd(cmd);
+		if (buf.buffer)
+			free(buf.buffer);
 	}
 	exit(1);
 }
