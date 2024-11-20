@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:11:55 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/05 20:08:15 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/20 21:05:26 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,28 @@ static int	handle_special_tokens(char **s, char current_token)
 	return (-1);
 }
 
+static int	handle_quotes(char **ps, char *es, char **q, char **eq)
+{
+	char	quote;
+	char	*s;
+
+	s = *ps;
+	quote = *s;
+	if (q)
+		*q = s;
+	s++;
+	while (s < es && *s != quote)
+		s++;
+	if (s == es || *s != quote)
+		exit_error("syntax error: missing closing quote\n");
+	s++;
+	if (eq)
+		*eq = s;
+	skip_whitespace(&s, es);
+	*ps = s;
+	return (OTHER);
+}
+
 int	get_token(char **ps, char *es, char **q, char **eq)
 {
 	char	*s;
@@ -56,8 +78,9 @@ int	get_token(char **ps, char *es, char **q, char **eq)
 	ret = *s;
 	if (*s == 0)
 		return (0);
-	else
-		ret = handle_special_tokens(&s, *s);
+	if (*s == D_QUOTE || *s == S_QUOTE)
+		return (handle_quotes(ps, es, q, eq));
+	ret = handle_special_tokens(&s, *s);
 	if (ret == -1)
 	{
 		ret = OTHER;
