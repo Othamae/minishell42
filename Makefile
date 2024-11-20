@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mac <mac@student.42.fr>                    +#+  +:+       +#+         #
+#    By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 16:52:40 by vconesa-          #+#    #+#              #
-#    Updated: 2024/10/16 14:46:51 by mac              ###   ########.fr        #
+#    Updated: 2024/11/20 10:21:33 by vconesa-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,36 @@ PATH_SRC			:=		src
 PATH_BUILD			:=		./build
 LIBFT_PATH 			:= 		./libft
 LIBFT 				:= 		$(LIBFT_PATH)/libft.a
-SRCS				:=		$(shell find $(PATH_SRC) -name *.c) # TODO: List the files .c
+SRCS				:=		$(PATH_SRC)/exec.c \
+							$(PATH_SRC)/free_cmd.c \
+							$(PATH_SRC)/ft_qsort.c \
+							$(PATH_SRC)/inits.c \
+							$(PATH_SRC)/main.c \
+							$(PATH_SRC)/nulterminate.c \
+							$(PATH_SRC)/parse_utils_2.c \
+							$(PATH_SRC)/parse_utils.c \
+							$(PATH_SRC)/parse.c \
+							$(PATH_SRC)/pipe.c \
+							$(PATH_SRC)/redir.c \
+							$(PATH_SRC)/signal.c \
+							$(PATH_SRC)/token_utils.c \
+							$(PATH_SRC)/token.c \
+							$(PATH_SRC)/utils_2.c \
+							$(PATH_SRC)/utils.c \
+							$(PATH_SRC)/builtins/builtins.c \
+							$(PATH_SRC)/builtins/cd_pwd.c \
+							$(PATH_SRC)/builtins/do_builtins.c \
+							$(PATH_SRC)/builtins/echo_env.c \
+							$(PATH_SRC)/builtins/echo_utils.c \
+							$(PATH_SRC)/builtins/echo.c \
+							$(PATH_SRC)/builtins/environ.c \
+							$(PATH_SRC)/builtins/export_env_utils.c \
+							$(PATH_SRC)/builtins/export_env.c \
+							$(PATH_SRC)/bonus/andor_bonus.c \
+							$(PATH_SRC)/bonus/inits_bonus.c \
+							$(PATH_SRC)/bonus/wildcards_bonus.c \
+							$(PATH_SRC)/bonus/wildcards_utils_bonus.c
+
 OBJS				:=		$(SRCS:$(PATH_SRC)/%.c=$(PATH_BUILD)/%.o)
 INC_DIRS			:=		./include
 
@@ -55,6 +84,9 @@ $(NAME):					$(LIBFT) $(OBJS)
 $(LIBFT):
 							make -C $(LIBFT_PATH) all
 
+bonus:						all
+							@ printf "$(_SUCCESS) Bonus compilation done\n"
+
 clean:
 							make -C $(LIBFT_PATH) clean
 							$(RM) $(OBJS)
@@ -65,5 +97,5 @@ fclean: 					clean
 
 re:							fclean all
 
-.PHONY:						all clean fclean re
+.PHONY:						all clean fclean re bonus
 
