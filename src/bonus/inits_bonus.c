@@ -6,11 +6,11 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 20:14:43 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/10/23 20:17:13 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:10:53 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 t_cmd	*subshellcmd(t_cmd *subcmd)
 {

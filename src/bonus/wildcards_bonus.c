@@ -6,11 +6,11 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 15:41:27 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/19 09:33:17 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:10:57 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	match_pattern_while(char *name, char *pattern, int *s_ind, int *n_ind)
 {

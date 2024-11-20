@@ -6,11 +6,11 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 13:01:50 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 20:38:49 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:11:12 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	handle_and_or(t_clist *lcmd, int *status, t_context *context)
 {

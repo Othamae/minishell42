@@ -6,11 +6,11 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 19:47:45 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/18 20:42:42 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:11:00 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	set_values(int *i, int i_value, int *j, int j_value)
 {
