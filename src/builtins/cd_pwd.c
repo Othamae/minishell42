@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:16:09 by mac               #+#    #+#             */
-/*   Updated: 2024/11/10 15:22:12 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/24 11:49:18 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	ft_pwd(void)
 	if (getcwd(cwd, 4096))
 	{
 		printf("%s\n", cwd);
-		return (1);
+		return (0);
 	}
 	else
-		return (0);
+		return (1);
 }
