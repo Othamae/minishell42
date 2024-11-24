@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/19 10:15:31 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/24 14:09:46 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@
 # define PROMPT	"\001\e[45m\002>>> \001\e[0m\e[33m\002Minishell>$ \001\e[0m\002"
 
 # define WHITESPACE " \t\r\v"
-# define SYMBOLS "<|>&()"
+# define SYMBOLS "<|>&()\"'"
 # define PERMISSIONS 0664
-# define MAX_BUFFER_SIZE 256
+# define MAX_BUFFER_SIZE 4064
 # define PATH_SEPARATOR ":"
 # define MAX_PATH_LENGTH 512
 
@@ -56,6 +56,8 @@
 # define OR	'o'
 # define OPEN_P '('
 # define CLOSE_P ')'
+# define D_QUOTE '"'
+# define S_QUOTE 39
 
 typedef struct s_cmd
 {
@@ -122,6 +124,8 @@ typedef struct s_subshell
 typedef struct s_context
 {
 	int	last_status;
+	int	is_pipe_child;
+	int	redir_handled;
 }	t_context;
 
 typedef struct s_qsort
@@ -175,10 +179,8 @@ void	skip_whitespace(char **s, char *es);
 // builtins
 int		vash_echo(char **args, t_context *context);
 int		vash_cd(char **args);
-int		vash_pwd(void);
 int		vash_env(void);
 int		vash_launch(char **argv);
-int		do_builtins(char *line);
 int		handle_builtins(char **args, t_context *context);
 int		ft_pwd(void);
 int		vash_unset(char **args);
@@ -187,7 +189,7 @@ int		vash_export(char **args);
 // exec
 void	runcmd(t_cmd *cmd, t_context *context);
 void	handle_herdoc(t_herdoc *hcmd, t_context *context);
-int		handle_pipe(t_pipe *pcmd, t_context *context);
+void	handle_pipe(t_pipe *pcmd, t_context *context);
 void	handle_redir(t_redir *rcmd, t_context *context);
 void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left, t_context *context);
 void	handle_and_or(t_clist *lcmd, int *status, t_context *context);
