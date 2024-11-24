@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/19 09:20:02 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/24 14:07:42 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,43 @@ int	getcmd(char *buff, int nbuf)
 	return (0);
 }
 
+static int	is_builtin(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	return (!ft_strncmp(cmd, "exit", 5) || !ft_strncmp(cmd, "cd", 3)
+		|| !ft_strncmp(cmd, "env", 4) || !ft_strncmp(cmd, "export", 7)
+		|| !ft_strncmp(cmd, "unset", 6));
+}
+
+void	handle_exec_t(t_exec *cmd, t_context *context)
+{
+	int	status;
+
+	if (is_builtin(cmd->argv[0]))
+		context->last_status = handle_builtins(cmd->argv, context);
+	else
+	{
+		if (fork1() == 0)
+			exit(handle_exec(cmd, context));
+		wait(&status);
+		context->last_status = WEXITSTATUS(status);
+	}
+}
+
 void	runcmd(t_cmd *cmd, t_context *context)
 {
 	int	status;
 
 	if (cmd == 0)
-		exit(1);
+		return ;
 	status = 0;
 	if (cmd->type == EXEC_T)
-		status = handle_exec((t_exec *)cmd, context);
+		handle_exec_t((t_exec *)cmd, context);
 	else if (cmd->type == REDIR_T)
 		handle_redir((t_redir *)cmd, context);
 	else if (cmd->type == PIPE_T)
-	{
-		status = handle_pipe((t_pipe *)cmd, context);
-		exit(status);
-	}
+		handle_pipe((t_pipe *)cmd, context);
 	else if (cmd->type == HERDOC_T)
 		handle_herdoc((t_herdoc *)cmd, context);
 	else if (cmd->type == AND_T || cmd->type == OR_T)
@@ -56,24 +77,8 @@ void	runcmd(t_cmd *cmd, t_context *context)
 		handle_subshell((t_subshell *)cmd, &status, context);
 	else
 		exit_error("runcmd error");
-	context->last_status = WEXITSTATUS(status);
-	exit(context->last_status);
-}
-
-static void	initialize_fd(void)
-{
-	int	fd;
-
-	fd = open(PROMPT, O_RDWR);
-	while (fd >= 0)
-	{
-		if (fd >= 3)
-		{
-			close(fd);
-			break ;
-		}
-		fd = open(PROMPT, O_RDWR);
-	}
+	if (context->is_pipe_child)
+		exit(context->last_status);
 }
 
 int	main(void)
@@ -85,18 +90,15 @@ int	main(void)
 
 	buf.buffer = NULL;
 	context.last_status = 0;
-	initialize_fd();
+	context.is_pipe_child = 0;
+	context.redir_handled = 0;
 	handle_signals();
 	while ((getcmd(buff, sizeof(buff)) >= 0))
 	{
 		add_history(buff);
-		if (do_builtins(buff))
-			continue ;
 		cmd = parsecmd(buff, &buf);
-		if (fork1() == 0)
+		if (cmd)
 			runcmd(cmd, &context);
-		wait(&context.last_status);
-		context.last_status = WEXITSTATUS(context.last_status);
 		free_cmd(cmd);
 		if (buf.buffer)
 			free(buf.buffer);
