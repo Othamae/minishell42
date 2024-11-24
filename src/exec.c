@@ -6,13 +6,13 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:59:48 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/09 11:24:35 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:39:15 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	handle_path(char *s, char **argv, char **environ)
+static int	handle_path(char *s, char **argv, char **environ)
 {
 	char	*path_env;
 	char	*path_token;
@@ -41,12 +41,23 @@ int	handle_path(char *s, char **argv, char **environ)
 	return (-1);
 }
 
+static int	is_builtin_child(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	return (!ft_strncmp(cmd, "exit", 5) || !ft_strncmp(cmd, "cd", 3)
+		|| !ft_strncmp(cmd, "echo", 5) || !ft_strncmp(cmd, "pwd", 4)
+		|| !ft_strncmp(cmd, "env", 4) || !ft_strncmp(cmd, "export", 7)
+		|| !ft_strncmp(cmd, "setenv", 7) || !ft_strncmp(cmd, "unset", 6)
+		|| !ft_strncmp(cmd, "unsetenv", 9));
+}
+
 int	handle_exec(t_exec *ecmd, t_context *context)
 {
 	extern char	**environ;
 
-	if (handle_builtins(ecmd->argv, context))
-		return (0);
+	if (is_builtin_child(ecmd->argv[0]))
+		return (handle_builtins(ecmd->argv, context));
 	if (ecmd->argv[0] == 0)
 	{
 		context->last_status = 1;
