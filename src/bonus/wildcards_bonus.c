@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 15:41:27 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/20 10:10:57 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:00:42 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ int	process_directory(char *path, char *pattern, t_wildbuff *buf)
 	{
 		if (match_pattern(entry->d_name, pattern))
 		{
-			entry_len = strlen(entry->d_name);
+			entry_len = ft_strlen(entry->d_name);
 			ensure_buffer_capacity(buf, entry_len + 2);
-			memcpy(buf->buffer + buf->len, entry->d_name, entry_len);
+			ft_memcpy(buf->buffer + buf->len, entry->d_name, entry_len);
 			buf->len += entry_len;
 			buf->buffer[buf->len++] = ' ';
 			expanded = 1;

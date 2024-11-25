@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 15:54:14 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/06 20:42:51 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/24 13:25:23 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,16 @@ void	handle_herdoc(t_herdoc *hcmd, t_context *context)
 
 void	handle_redir(t_redir *rcmd, t_context *context)
 {
-	close(rcmd->info.fd);
-	if (open(rcmd->file, rcmd->info.mode, PERMISSIONS) < 0)
+	if (fork1() == 0)
 	{
-		printf("open %s failed\n", rcmd->file);
-		exit(1);
+		close(rcmd->info.fd);
+		if (open(rcmd->file, rcmd->info.mode, PERMISSIONS) < 0)
+		{
+			printf("open %s failed\n", rcmd->file);
+			exit(1);
+		}
+		runcmd(rcmd->cmd, context);
+		exit(context->last_status);
 	}
-	runcmd(rcmd->cmd, context);
+	wait(&context->last_status);
 }

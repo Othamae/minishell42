@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 21:26:11 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/19 10:14:44 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:21:18 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ static void	free_redir(t_cmd *cmd)
 	if (cmd->type == REDIR_T)
 	{
 		redir_cmd = (t_redir *)cmd;
-		free(redir_cmd->file);
-		free(redir_cmd->efile);
+		redir_cmd->file = NULL;
+		redir_cmd->efile = NULL;
 		free_cmd(redir_cmd->cmd);
 	}
 	else if (cmd->type == HERDOC_T)

@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 12:27:10 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/10 15:20:22 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:57:32 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,13 @@ int	only_spaces(char *str)
 		str++;
 	}
 	return (1);
+}
+
+int	is_builtin(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	return (!ft_strncmp(cmd, "exit", 5) || !ft_strncmp(cmd, "cd", 3)
+		|| !ft_strncmp(cmd, "env", 4) || !ft_strncmp(cmd, "export", 7)
+		|| !ft_strncmp(cmd, "unset", 6));
 }

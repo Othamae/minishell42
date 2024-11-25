@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/09 14:11:37 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/24 21:07:02 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,58 +39,21 @@ int	vash_launch(char **argv)
 
 int	handle_builtins(char **args, t_context *context)
 {
-	if (args[0] == NULL)
+	if (!args[0])
 		return (0);
-	if (ft_strncmp(args[0], "exit", 5) == 0)
+	if (!ft_strncmp(args[0], "exit", 5))
 		exit(0);
-	else if (ft_strncmp(args[0], "cd", 3) == 0)
-		vash_cd(args);
-	else if (ft_strncmp(args[0], "echo", 5) == 0)
-		vash_echo(args, context);
-	else if (ft_strncmp(args[0], "pwd", 4) == 0)
-		ft_pwd();
-	else if (ft_strncmp(args[0], "env", 4) == 0)
-		vash_env();
-	else if (ft_strncmp(args[0], "export", 7) == 0)
-		vash_export(args);
-	else if (ft_strncmp(args[0], "setenv", 7) == 0)
-		vash_env();
-	else if (ft_strncmp(args[0], "unset", 6) == 0
-		|| ft_strncmp(args[0], "unsetenv", 9) == 0)
-		vash_unset(args);
-	else
-		return (context->last_status = 0);
-	return (context->last_status = 1);
+	else if (!ft_strncmp(args[0], "cd", 3))
+		return (vash_cd(args));
+	else if (!ft_strncmp(args[0], "echo", 5))
+		return (vash_echo(args, context));
+	else if (!ft_strncmp(args[0], "pwd", 4))
+		return (ft_pwd());
+	else if (!ft_strncmp(args[0], "env", 4))
+		return (vash_env(context));
+	else if (!ft_strncmp(args[0], "export", 7))
+		return (vash_export(args, context));
+	else if (!ft_strncmp(args[0], "unset", 6))
+		return (vash_unset(args, context));
+	return (0);
 }
-
-//Previous code of handle_builtins -- delete if everything works
-
-//int handle_builtins(char **args)
-// {
-// 	if (args[0] == NULL)
-// 		return 0;
-// 	if (ft_strncmp(args[0], "exit", 5) == 0)
-// 		exit(0);
-// 	else if (ft_strncmp(args[0], "cd", 3) == 0)
-// 		vash_cd(args);
-// 	else if (ft_strncmp(args[0], "echo", 5) == 0)
-// 		vash_echo(args);
-// 	else if (ft_strncmp(args[0], "pwd", 4) == 0)
-// 		ft_pwd();
-// 	else if (ft_strncmp(args[0], "env", 4) == 0)
-// 		vash_env();
-// 	else if (ft_strncmp(args[0], "export", 7) == 0
-// 		|| ft_strncmp(args[0], "setenv", 7) == 0)
-// 	{
-// 		if (args[1] == NULL && ft_strncmp(args[0], "setenv", 7) != 0)
-// 			vash_env();
-// 		else
-// 			vash_export(args);
-// 	}
-// 	else if (ft_strncmp(args[0], "unset", 6) == 0
-// 		|| ft_strncmp(args[0], "unsetenv", 9) == 0)
-// 		vash_unset(args);
-// 	else
-// 		return (0);
-// 	return (1);
-// }

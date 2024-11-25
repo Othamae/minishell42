@@ -6,7 +6,7 @@
 #    By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 16:52:40 by vconesa-          #+#    #+#              #
-#    Updated: 2024/11/20 10:21:33 by vconesa-         ###   ########.fr        #
+#    Updated: 2024/11/25 19:49:20 by vconesa-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ LIBFT 				:= 		$(LIBFT_PATH)/libft.a
 SRCS				:=		$(PATH_SRC)/exec.c \
 							$(PATH_SRC)/free_cmd.c \
 							$(PATH_SRC)/ft_qsort.c \
+							$(PATH_SRC)/init_free_context.c \
 							$(PATH_SRC)/inits.c \
 							$(PATH_SRC)/main.c \
 							$(PATH_SRC)/nulterminate.c \
@@ -34,7 +35,6 @@ SRCS				:=		$(PATH_SRC)/exec.c \
 							$(PATH_SRC)/utils.c \
 							$(PATH_SRC)/builtins/builtins.c \
 							$(PATH_SRC)/builtins/cd_pwd.c \
-							$(PATH_SRC)/builtins/do_builtins.c \
 							$(PATH_SRC)/builtins/echo_env.c \
 							$(PATH_SRC)/builtins/echo_utils.c \
 							$(PATH_SRC)/builtins/echo.c \
@@ -49,8 +49,8 @@ SRCS				:=		$(PATH_SRC)/exec.c \
 OBJS				:=		$(SRCS:$(PATH_SRC)/%.c=$(PATH_BUILD)/%.o)
 INC_DIRS			:=		./include
 
-CC					:=		gcc
-FLAGS 				:= 		-g -Wall -Wextra -Werror
+CC					:=		gcc # remove g
+FLAGS 				:= 		-g -Wall -Wextra -Werror # remove g
 FLAGS_LIB			:= 		-lreadline
 RM					:=		rm -rf
 
