@@ -6,98 +6,68 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 16:04:54 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/10 15:07:54 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:55:34 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	**expand_environ(char **environ, int size, int *count)
+static char	**expand_environ(int *count, t_context *context)
 {
 	int		i;
-	char	**env_copy;
+	char	**new_environ;
 
 	*count = 0;
-	while (environ[(*count)] != NULL)
+	while (context->env[(*count)] != NULL)
 		(*count)++;
-	env_copy = malloc(((*count) + size + 1) * sizeof(char *));
-	if (!env_copy)
-		return (NULL);
+	new_environ = safe_malloc(((*count) + 2) * sizeof(char *));
 	i = 0;
-	while (i < (*count))
+	while (context->env[i])
 	{
-		env_copy[i] = environ[i];
+		new_environ[i] = ft_strdup(context->env[i]);
 		i++;
 	}
-	while (i < ((*count) + size))
-	{
-		env_copy[i] = NULL;
-		i++;
-	}
-	env_copy[(*count) + size] = NULL;
-	return (env_copy);
+	new_environ[i] = NULL;
+	return (new_environ);
 }
 
-char	**copy_environ(char **environ, int *count)
+char	**copy_environ(int *count, t_context *context)
 {
 	int		i;
 	char	**env_copy;
 
 	i = 0;
 	*count = 0;
-	while (environ[*count] != NULL)
+	while (context->env[*count] != NULL)
 		(*count)++;
-	env_copy = malloc((*count + 1) * sizeof(char *));
-	if (!env_copy)
-		return (NULL);
+	env_copy = safe_malloc((*count + 1) * sizeof(char *));
 	while (i < *count)
 	{
-		env_copy[i] = environ[i];
+		env_copy[i] = context->env[i];
 		i++;
 	}
 	env_copy[*count] = NULL;
 	return (env_copy);
 }
 
-void	print_sorted_env(char **environ)
-{
-	char	**env_copy;
-	int		count;
-	int		i;
-	char	*equal_sign;
-
-	env_copy = copy_environ(environ, &count);
-	ft_qsort(env_copy, count, sizeof(char *), compare_strings);
-	i = 0;
-	while (i < count)
-	{
-		equal_sign = ft_strchr(env_copy[i], '=');
-		if (equal_sign)
-		{
-			*equal_sign = '\0';
-			printf("declare -x %s=\"%s\"\n", env_copy[i], equal_sign + 1);
-			*equal_sign = '=';
-		}
-		else
-			printf("declare -x %s\n", env_copy[i]);
-		i++;
-	}
-	free(env_copy);
-}
-
-int	edit_variable(char *name, char *new_var, char ***env_copy)
+static int	edit_variable(char *name, char *new_var, t_context *context)
 {
 	int	i;
 
 	i = 0;
-	while ((*env_copy)[i] != NULL)
+	while (context->env[i] != NULL)
 	{
-		if (ft_strncmp((*env_copy)[i], name, ft_strlen(name)) == 0 &&
-			((*env_copy)[i][ft_strlen(name)] == '='
-				|| !(*env_copy)[i][ft_strlen(name)]))
+		if (ft_strncmp(context->env[i], name, ft_strlen(name)) == 0
+			&& (context->env[i][ft_strlen(name)] == '='
+			|| !context->env[i][ft_strlen(name)]))
 		{
-			free((*env_copy)[i]);
-			(*env_copy)[i] = new_var;
+			free(context->env[i]);
+			context->env[i] = ft_strdup(new_var);
+			if (!context->env[i])
+			{
+				perror("Error duplicating string");
+				return (0);
+			}
 			return (1);
 		}
 		i++;
@@ -105,30 +75,41 @@ int	edit_variable(char *name, char *new_var, char ***env_copy)
 	return (0);
 }
 
-int	ft_setenv(char *name, char *value, char ***environ)
+static char	*set_new_var(char *name, char *value)
 {
-	char	**env_copy;
+	char	*new_var;
 	size_t	len;
+
+	if (value == NULL)
+		len = ft_strlen(name) + 1;
+	else
+		len = ft_strlen(name) + ft_strlen(value) + 2;
+	new_var = safe_malloc((sizeof(char) * len));
+	ft_strlcpy(new_var, name, ft_strlen(name) + 1);
+	if (value != NULL)
+	{
+		ft_strlcat(new_var, "=", ft_strlen(new_var) + 2);
+		ft_strlcat(new_var, value, len);
+	}
+	return (new_var);
+}
+
+int	ft_setenv(char *name, char *value, t_context *context)
+{
+	char	**new_environ;
 	int		count;
 	char	*new_var;
 
-	len = ft_strlen(name) + ft_strlen(value) + 2;
-	env_copy = expand_environ(*environ, len, &count);
-	new_var = (char *)malloc((sizeof(char) * len));
-	if (!new_var)
-		return (1);
-	ft_strlcpy(new_var, name, ft_strlen(name) + 1);
-	ft_strlcat(new_var, "=", ft_strlen(new_var) + 2);
-	ft_strlcat(new_var, value, len);
-	if (edit_variable(name, new_var, &env_copy))
+	new_var = set_new_var(name, value);
+	if (edit_variable(name, new_var, context))
 	{
-		free(*environ);
-		*environ = env_copy;
+		free(new_var);
 		return (0);
 	}
-	env_copy[count] = new_var;
-	env_copy[count + 1] = NULL;
-	free(*environ);
-	*environ = env_copy;
+	new_environ = expand_environ(&count, context);
+	new_environ[count] = new_var;
+	new_environ[count + 1] = NULL;
+	free_env(context);
+	context->env = new_environ;
 	return (0);
 }
