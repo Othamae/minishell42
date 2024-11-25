@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 23:19:05 by mac               #+#    #+#             */
-/*   Updated: 2024/11/06 15:00:36 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/20 11:37:13 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	handle_eof(int sig)
 void	handle_sigquit(int sig)
 {
 	(void)sig;
+	rl_on_new_line();
 	rl_redisplay();
 }
 
