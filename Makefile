@@ -6,7 +6,7 @@
 #    By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 16:52:40 by vconesa-          #+#    #+#              #
-#    Updated: 2024/11/24 13:22:30 by vconesa-         ###   ########.fr        #
+#    Updated: 2024/11/25 19:49:20 by vconesa-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ LIBFT 				:= 		$(LIBFT_PATH)/libft.a
 SRCS				:=		$(PATH_SRC)/exec.c \
 							$(PATH_SRC)/free_cmd.c \
 							$(PATH_SRC)/ft_qsort.c \
+							$(PATH_SRC)/init_free_context.c \
 							$(PATH_SRC)/inits.c \
 							$(PATH_SRC)/main.c \
 							$(PATH_SRC)/nulterminate.c \
