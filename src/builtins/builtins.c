@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 15:34:32 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/24 13:18:55 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/24 21:07:02 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ int	handle_builtins(char **args, t_context *context)
 	else if (!ft_strncmp(args[0], "pwd", 4))
 		return (ft_pwd());
 	else if (!ft_strncmp(args[0], "env", 4))
-		return (vash_env());
+		return (vash_env(context));
 	else if (!ft_strncmp(args[0], "export", 7))
-		return (vash_export(args));
+		return (vash_export(args, context));
 	else if (!ft_strncmp(args[0], "unset", 6))
-		return (vash_unset(args));
+		return (vash_unset(args, context));
 	return (0);
 }
