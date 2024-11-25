@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:23:19 by mac               #+#    #+#             */
-/*   Updated: 2024/11/25 19:29:11 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:47:17 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,32 @@ static int	set_env_variable(t_context *context, char *name, char *value)
 		return (1);
 	}
 	return (0);
+}
+
+void	print_sorted_env(t_context *context)
+{
+	char	**env_copy;
+	int		count;
+	int		i;
+	char	*equal_sign;
+
+	env_copy = copy_environ(&count, context);
+	ft_qsort(env_copy, count, sizeof(char *), compare_strings);
+	i = 0;
+	while (i < count)
+	{
+		equal_sign = ft_strchr(env_copy[i], '=');
+		if (equal_sign)
+		{
+			*equal_sign = '\0';
+			printf("declare -x %s=\"%s\"\n", env_copy[i], equal_sign + 1);
+			*equal_sign = '=';
+		}
+		else
+			printf("declare -x %s\n", env_copy[i]);
+		i++;
+	}
+	free(env_copy);
 }
 
 int	vash_export(char **args, t_context *context)
