@@ -6,18 +6,17 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 13:16:09 by mac               #+#    #+#             */
-/*   Updated: 2024/11/10 15:08:19 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:24:03 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	vash_env(void)
+int	vash_env(t_context *context)
 {
-	extern char	**environ;
-	char		**env;
+	char	**env;
 
-	env = environ;
+	env = context->env;
 	while (*env)
 	{
 		if (ft_strchr(*env, '='))
@@ -27,7 +26,7 @@ int	vash_env(void)
 	return (0);
 }
 
-static void	remove_env_var(char **environ, char *arg)
+static void	remove_env_var(t_context *context, char *arg)
 {
 	int	i;
 	int	j;
@@ -35,15 +34,16 @@ static void	remove_env_var(char **environ, char *arg)
 
 	i = 0;
 	len = ft_strlen(arg);
-	while (environ[i] != NULL)
+	while (context->env[i])
 	{
-		if (ft_strncmp(environ[i], arg, len) == 0
-			&& (environ[i][len] == '=' || !environ[i][len]))
+		if (ft_strncmp(context->env[i], arg, len) == 0
+			&& (context->env[i][len] == '=' || !context->env[i][len]))
 		{
+			free(context->env[i]);
 			j = i;
-			while (environ[j] != NULL)
+			while (context->env[j])
 			{
-				environ[j] = environ[j + 1];
+				context->env[j] = context->env[j + 1];
 				j++;
 			}
 			break ;
@@ -52,9 +52,8 @@ static void	remove_env_var(char **environ, char *arg)
 	}
 }
 
-int	vash_unset(char **args)
+int	vash_unset(char **args, t_context *context)
 {
-	extern char	**environ;
 	int			k;
 
 	k = 1;
@@ -65,46 +64,8 @@ int	vash_unset(char **args)
 	}
 	while (args[k] != NULL)
 	{
-		remove_env_var(environ, args[k]);
+		remove_env_var(context, args[k]);
 		k++;
 	}
 	return (0);
 }
-
-// int vash_unset(char **args)
-// {
-// 	extern char **environ;
-// 	int i;
-// 	int j;
-// 	int k;
-// 	int len;
-
-// 	if (args[1] == NULL)
-// 	{
-// 		printf("Error: expected argument to unset\n");
-// 		return 1;
-// 	}
-// 	k = 1;
-// 	while (args[k] != NULL)
-// 	{
-// 		i = 0;
-// 		len = ft_strlen(args[k]);
-// 		while (environ[i] != NULL)
-// 		{
-// 			if (ft_strncmp(environ[i], args[k],
-				//len) == 0 && environ[i][len] == '=')
-// 			{
-// 				j = i;
-// 				while (environ[j] != NULL)
-// 				{
-// 					environ[j] = environ[j + 1];
-// 					j++;
-// 				}
-// 				break;
-// 			}
-// 			i++;
-// 		}
-// 		k++;
-// 	}
-// 	return 0;
-// }
