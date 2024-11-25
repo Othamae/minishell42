@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/24 14:07:42 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:58:32 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,6 @@ int	getcmd(char *buff, int nbuf)
 		return (-1);
 	free(input);
 	return (0);
-}
-
-static int	is_builtin(char *cmd)
-{
-	if (!cmd)
-		return (0);
-	return (!ft_strncmp(cmd, "exit", 5) || !ft_strncmp(cmd, "cd", 3)
-		|| !ft_strncmp(cmd, "env", 4) || !ft_strncmp(cmd, "export", 7)
-		|| !ft_strncmp(cmd, "unset", 6));
 }
 
 void	handle_exec_t(t_exec *cmd, t_context *context)
@@ -81,7 +72,7 @@ void	runcmd(t_cmd *cmd, t_context *context)
 		exit(context->last_status);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	static char	buff[MAX_BUFFER_SIZE];
 	t_context	context;
@@ -89,9 +80,9 @@ int	main(void)
 	t_wildbuff	buf;
 
 	buf.buffer = NULL;
-	context.last_status = 0;
-	context.is_pipe_child = 0;
-	context.redir_handled = 0;
+	(void)argc;
+	(void)argv;
+	init_context(env, &context);
 	handle_signals();
 	while ((getcmd(buff, sizeof(buff)) >= 0))
 	{
@@ -103,5 +94,7 @@ int	main(void)
 		if (buf.buffer)
 			free(buf.buffer);
 	}
+	if (context.env)
+		free_env(&context);
 	exit(1);
 }
