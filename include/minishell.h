@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/24 14:09:46 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:59:12 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,10 @@ typedef struct s_subshell
 
 typedef struct s_context
 {
-	int	last_status;
-	int	is_pipe_child;
-	int	redir_handled;
+	int		last_status;
+	int		is_pipe_child;
+	int		redir_handled;
+	char	**env;
 }	t_context;
 
 typedef struct s_qsort
@@ -146,6 +147,7 @@ int		has_unclosed_quotes(const char *s);
 // utils_2.c
 char	*ft_strtok(char *str, const char *delim);
 int		only_spaces(char *str);
+int		is_builtin(char *cmd);
 
 // parse
 t_cmd	*parsecmd(char *s, t_wildbuff *buf);
@@ -173,18 +175,18 @@ t_cmd	*subshellcmd(t_cmd *subcmd);
 int		find_next_token(char **ps, char *es, char *tokens);
 int		get_token(char **ps, char *es, char **q, char **eq);
 
-//token utils
+// token utils
 void	skip_whitespace(char **s, char *es);
 
 // builtins
 int		vash_echo(char **args, t_context *context);
 int		vash_cd(char **args);
-int		vash_env(void);
+int		vash_env(t_context *context);
 int		vash_launch(char **argv);
 int		handle_builtins(char **args, t_context *context);
 int		ft_pwd(void);
-int		vash_unset(char **args);
-int		vash_export(char **args);
+int		vash_unset(char **args, t_context *context);
+int		vash_export(char **args, t_context *context);
 
 // exec
 void	runcmd(t_cmd *cmd, t_context *context);
@@ -198,6 +200,10 @@ void	handle_subshell(t_subshell *subcmd, int *status, t_context *context);
 
 // signal
 void	handle_signals(void);
+
+// context
+void	init_context(char **env, t_context *context);
+void	free_env(t_context *context);
 
 // free_cmd
 void	free_cmd(t_cmd *cmd);
@@ -213,10 +219,9 @@ void	handle_double_quoted_env_var(char *arg, char *old_str, int *j);
 void	handle_env_var(char *arg, char *old_str, int *j);
 
 // export_env_utils.c
-void	print_sorted_env(char **environ);
-char	**copy_environ(char **environ, int *count);
-char	**expand_environ(char **environ, int size, int *count);
-int		ft_setenv(char *name, char *value, char ***environ);
+void	print_sorted_env(t_context *context);
+char	**copy_environ(int *count, t_context *context);
+int		ft_setenv(char *name, char *value, t_context *context);
 
 // ft_qsort
 int		compare_strings(const void *a, const void *b);
