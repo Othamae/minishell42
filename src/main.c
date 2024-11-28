@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/25 19:58:32 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:42:47 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,14 @@ void	handle_exec_t(t_exec *cmd, t_context *context)
 	else
 	{
 		if (fork1() == 0)
+		{
+			default_signals();
 			exit(handle_exec(cmd, context));
+		}
+		ignore_signals();
 		wait(&status);
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, handle_sigquit);
 		context->last_status = WEXITSTATUS(status);
 	}
 }

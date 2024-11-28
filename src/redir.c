@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 15:54:14 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/24 13:25:23 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:56:25 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,8 @@ static void	handle_write_error(char *line, int fd)
 	exit(EXIT_FAILURE);
 }
 
-void	handle_herdoc(t_herdoc *hcmd, t_context *context)
+static void	process_herdoc(char	*line, t_herdoc *hcmd, int p[2])
 {
-	int		p[2];
-	char	*line;
-
-	if (pipe(p) < 0)
-		exit_error("pipe");
 	while (1)
 	{
 		line = readline("> ");
@@ -42,9 +37,24 @@ void	handle_herdoc(t_herdoc *hcmd, t_context *context)
 			handle_write_error(line, p[1]);
 		free(line);
 	}
+}
+
+void	handle_herdoc(t_herdoc *hcmd, t_context *context)
+{
+	int		p[2];
+	char	*line;
+
+	line = NULL;
+	if (pipe(p) < 0)
+		exit_error("pipe");
+	process_herdoc(line, hcmd, p);
 	close(p[1]);
 	if (fork1() == 0)
+	{
+		default_signals();
 		exec_pipe_child(hcmd->right, p, 0, context);
+	}
+	ignore_signals();
 	wait(0);
 }
 
@@ -52,6 +62,7 @@ void	handle_redir(t_redir *rcmd, t_context *context)
 {
 	if (fork1() == 0)
 	{
+		default_signals();
 		close(rcmd->info.fd);
 		if (open(rcmd->file, rcmd->info.mode, PERMISSIONS) < 0)
 		{
@@ -61,5 +72,8 @@ void	handle_redir(t_redir *rcmd, t_context *context)
 		runcmd(rcmd->cmd, context);
 		exit(context->last_status);
 	}
+	ignore_signals();
 	wait(&context->last_status);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
 }

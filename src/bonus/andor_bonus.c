@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   andor_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 13:01:50 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/24 13:00:11 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:40:42 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ void	handle_subshell(t_subshell *subcmd, int *status, t_context *context)
 {
 	if (fork1() == 0)
 	{
+		default_signals();
 		runcmd(subcmd->subcmd, context);
 		exit(context->last_status);
 	}
 	else
 	{
+		ignore_signals();
 		wait(status);
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, handle_sigquit);
 		*status = WEXITSTATUS(*status);
 		context->last_status = *status;
 	}
