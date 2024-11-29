@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 09:50:49 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/29 09:58:57 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ void	handle_herdoc(t_herdoc *hcmd, t_context *context);
 void	handle_pipe(t_pipe *pcmd, t_context *context);
 void	handle_redir(t_redir *rcmd, t_context *context);
 void	exec_pipe_child(t_cmd *cmd, int p[2], int is_left, t_context *context);
-void	handle_and_or(t_clist *lcmd, int *status, t_context *context);
+void	handle_and_or(t_clist *lcmd, t_context *context);
 int		handle_exec(t_exec *ecmd, t_context *context);
 void	handle_subshell(t_subshell *subcmd, int *status, t_context *context);
 
