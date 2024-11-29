@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/19 10:16:34 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:36:38 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_cmd	*parsepipe(char **ps, char *es)
 	{
 		token = get_token(ps, es, 0, 0);
 		if (token == OR)
-			cmd = listcmd(cmd, parsepipe(ps, es), OR_T);
+			cmd = listcmd(cmd, parseline(ps, es), OR_T);
 		else
 			cmd = pipecmd(cmd, parsepipe(ps, es));
 	}
@@ -98,7 +98,8 @@ t_cmd	*parsecmd(char *s, t_wildbuff *buf)
 	if (s != es)
 	{
 		printf("left overs: %s\n", s);
-		exit_error("syntax error\n");
+		printf("syntax error\n");
+		return (0);
 	}
 	nulterminate(cmd);
 	return (cmd);

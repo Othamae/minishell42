@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/28 14:42:47 by mac              ###   ########.fr       */
+/*   Updated: 2024/11/29 12:39:52 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	runcmd(t_cmd *cmd, t_context *context)
 	else if (cmd->type == HERDOC_T)
 		handle_herdoc((t_herdoc *)cmd, context);
 	else if (cmd->type == AND_T || cmd->type == OR_T)
-		handle_and_or((t_clist *)cmd, &status, context);
+		handle_and_or((t_clist *)cmd, context);
 	else if (cmd->type == SUBSHELL_T)
 		handle_subshell((t_subshell *)cmd, &status, context);
 	else

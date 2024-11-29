@@ -3,30 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   andor_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 13:01:50 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/28 14:40:42 by mac              ###   ########.fr       */
+/*   Updated: 2024/11/29 17:45:47 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_and_or(t_clist *lcmd, int *status, t_context *context)
+static void	check_next_cmd(t_clist *lcmd, t_context *context)
+{
+	t_clist	*right;
+
+	right = (t_clist *)lcmd->right;
+	if (right)
+		runcmd(right->right, context);
+}
+
+void	handle_and_or(t_clist *lcmd, t_context *context)
 {
 	runcmd(lcmd->left, context);
-	*status = context->last_status;
 	if (lcmd->base.type == AND_T)
 	{
-		if (*status == 0)
+		if (context->last_status == 0)
 			runcmd(lcmd->right, context);
+		else if (lcmd->right->type != EXEC_T && lcmd->right->type != PIPE_T
+			&& lcmd->right->type != AND_T)
+			check_next_cmd(lcmd, context);
 	}
 	else if (lcmd->base.type == OR_T)
 	{
-		if (*status != 0)
+		if (context->last_status != 0)
 			runcmd(lcmd->right, context);
+		else if (lcmd->right->type != EXEC_T && lcmd->right->type != PIPE_T
+			&& lcmd->right->type != OR_T)
+			check_next_cmd(lcmd, context);
 	}
-	*status = context->last_status;
 }
 
 void	handle_subshell(t_subshell *subcmd, int *status, t_context *context)
