@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/25 19:59:12 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:38:35 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,6 @@ void	skip_whitespace(char **s, char *es);
 int		vash_echo(char **args, t_context *context);
 int		vash_cd(char **args);
 int		vash_env(t_context *context);
-int		vash_launch(char **argv);
 int		handle_builtins(char **args, t_context *context);
 int		ft_pwd(void);
 int		vash_unset(char **args, t_context *context);
@@ -199,7 +198,11 @@ int		handle_exec(t_exec *ecmd, t_context *context);
 void	handle_subshell(t_subshell *subcmd, int *status, t_context *context);
 
 // signal
+void	handle_sigint(int sig);
+void	handle_sigquit(int sig);
 void	handle_signals(void);
+void	ignore_signals(void);
+void	default_signals(void);
 
 // context
 void	init_context(char **env, t_context *context);

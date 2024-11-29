@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 16:22:06 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/24 13:35:05 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:42:13 by mac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,22 @@ void	handle_pipe(t_pipe *cmd, t_context *context)
 	if (pipe(p) < 0)
 		exit_error("pipe failed");
 	if (fork1() == 0)
+	{
+		default_signals();
 		exec_pipe_child(cmd->left, p, 1, context);
+	}
 	if (fork1() == 0)
+	{
+		default_signals();
 		exec_pipe_child(cmd->right, p, 0, context);
+	}
 	close(p[0]);
 	close(p[1]);
+	ignore_signals();
 	wait(&status_left);
 	context->last_status = WEXITSTATUS(status_left);
 	context->is_pipe_child = 0;
 	wait(&status_right);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
 }

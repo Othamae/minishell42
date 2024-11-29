@@ -6,10 +6,9 @@
 #    By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 16:52:40 by vconesa-          #+#    #+#              #
-#    Updated: 2024/11/25 19:49:20 by vconesa-         ###   ########.fr        #
+#    Updated: 2024/11/29 09:33:04 by vconesa-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 NAME				:=		minishell
 PATH_SRC			:=		src
@@ -98,4 +97,3 @@ fclean: 					clean
 re:							fclean all
 
 .PHONY:						all clean fclean re bonus
-
