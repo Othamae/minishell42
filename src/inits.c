@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 19:44:08 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 10:37:06 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:38:24 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,5 @@ t_cmd	*listcmd(t_cmd *left, t_cmd *right, int type)
 	cmd->base.type = type;
 	cmd->left = left;
 	cmd->right = right;
-	//printf("listcmd: type=%d, left->type=%d, right->type=%d\n",
-        //    type,
-        //    left ? left->type : -1,
-        //    right ? right->type : -1);
 	return ((t_cmd *)cmd);
 }
