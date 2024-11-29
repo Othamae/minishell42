@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/28 14:42:47 by mac              ###   ########.fr       */
+/*   Updated: 2024/11/29 09:51:33 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	handle_exec_t(t_exec *cmd, t_context *context)
 {
 	int	status;
 
+	printf("EXEC_T: cmd->argv[0]=%s\n", cmd->argv[0]);
 	if (is_builtin(cmd->argv[0]))
 		context->last_status = handle_builtins(cmd->argv, context);
 	else

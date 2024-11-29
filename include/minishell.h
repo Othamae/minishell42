@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/28 14:38:35 by mac              ###   ########.fr       */
+/*   Updated: 2024/11/29 09:50:49 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ int		is_builtin(char *cmd);
 // parse
 t_cmd	*parsecmd(char *s, t_wildbuff *buf);
 t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es);
+t_cmd	*parseline(char **ps, char *es);
 
 // parse_utils
 t_cmd	*handle_parseredirs(t_cmd *cmd, char *q, char *eq, int tok);

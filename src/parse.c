@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/19 10:16:34 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/27 14:48:46 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,27 @@ t_cmd	*parseexec(char **ps, char *es)
 	return (ret);
 }
 
+
 t_cmd	*parsepipe(char **ps, char *es)
 {
 	t_cmd	*cmd;
 	int		token;
 
 	cmd = parseexec(ps, es);
+	printf("ANTES IF:parsepipe - ps:%s\n", *ps);
+	//printf("ANTES IF:parsepipe - ps+1:%s\n", *ps+1);
 	if (find_next_token(ps, es, "|"))
 	{
+		printf("parsepipe - ps:%s\n", *ps);
+		//printf("parsepipe - ps+1:%s\n", *ps+1);
 		token = get_token(ps, es, 0, 0);
+		printf("parsepipe - token:%d\n", token);
 		if (token == OR)
-			cmd = listcmd(cmd, parsepipe(ps, es), OR_T);
+		{
+			printf("Dentro del if Encontrado operador: %s\n", (token == AND ? "&&" : "||"));
+
+			cmd = listcmd(cmd, parseline(ps, es), OR_T);
+		}
 		else
 			cmd = pipecmd(cmd, parsepipe(ps, es));
 	}
@@ -62,27 +72,48 @@ t_cmd	*parseline(char **ps, char *es)
 	t_cmd	*cmd;
 	int		token;
 
+    printf("Tokens restantes: %s\n", *ps);
 	if (find_next_token(ps, es, "("))
 	{
 		get_token(ps, es, 0, 0);
-		cmd = subshellcmd(parseline(ps, es));
+		// cmd = subshellcmd(parseline(ps, es));
+		cmd = parseline(ps, es);
 		if (find_next_token(ps, es, ")"))
 			get_token(ps, es, 0, 0);
 		else
-			exit_error("syntax error: missing )");
+		{
+			printf("syntax error: missing )\n");
+			//exit_error("syntax error: missing )");
+			return (0);
+		}
+		cmd = subshellcmd(cmd); 
 	}
 	else
 		cmd = parsepipe(ps, es);
-	while (find_next_token(ps, es, "&&||"))
+	while (find_next_token(ps, es, "&&"))
 	{
 		token = get_token(ps, es, 0, 0);
-		if (token == AND)
+		printf("Encontrado operador: %s\n", (token == AND ? "&&" : "||"));
+
+		// if (token == AND)
 			cmd = listcmd(cmd, parseline(ps, es), AND_T);
-		else if (token == OR)
+		// else if (token == OR)
+			// cmd = listcmd(cmd, parseline(ps, es), OR_T);
+	}
+	while (find_next_token(ps, es, "||"))
+	{
+		token = get_token(ps, es, 0, 0);
+		printf("Encontrado operador: %s\n", (token == AND ? "&&" : "||"));
+
+		// if (token == AND)
+		// 	cmd = listcmd(cmd, parseline(ps, es), AND_T);
+		// else if (token == OR)
 			cmd = listcmd(cmd, parseline(ps, es), OR_T);
 	}
 	return (cmd);
 }
+
+
 
 t_cmd	*parsecmd(char *s, t_wildbuff *buf)
 {
@@ -98,7 +129,9 @@ t_cmd	*parsecmd(char *s, t_wildbuff *buf)
 	if (s != es)
 	{
 		printf("left overs: %s\n", s);
-		exit_error("syntax error\n");
+		printf("syntax error\n");
+		return (0);
+		//exit_error("syntax error\n");
 	}
 	nulterminate(cmd);
 	return (cmd);
