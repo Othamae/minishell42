@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 13:01:50 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:43:27 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:50:00 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ void	handle_and_or(t_clist *lcmd, t_context *context)
 	{
 		if (context->last_status != 0)
 			runcmd(lcmd->right, context);
+		else if (lcmd->right->type != EXEC_T)
+		{
+			right = (t_clist *)lcmd->right;
+			if (right)
+				runcmd(right->right, context);
+		}
 	}
 }
 
