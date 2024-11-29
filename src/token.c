@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:11:55 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/26 22:40:07 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/29 12:32:07 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int	find_next_token(char **ps, char *es, char *tokens)
 	char	*s;
 
 	s = *ps;
-	printf("find_next_token: s=%s, tokens=%s\n", s, tokens);
 	while (s < es && ft_strchr(WHITESPACE, *s))
 		s++;
 	*ps = s;
