@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:59:48 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/24 13:39:15 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/11/29 09:39:44 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ static int	is_builtin_child(char *cmd)
 
 int	handle_exec(t_exec *ecmd, t_context *context)
 {
-	extern char	**environ;
-
 	if (is_builtin_child(ecmd->argv[0]))
 		return (handle_builtins(ecmd->argv, context));
 	if (ecmd->argv[0] == 0)
@@ -64,9 +62,9 @@ int	handle_exec(t_exec *ecmd, t_context *context)
 		return (1);
 	}
 	if (ft_strchr(ecmd->argv[0], '/') != NULL)
-		execve(ecmd->argv[0], ecmd->argv, environ);
+		execve(ecmd->argv[0], ecmd->argv, context->env);
 	else
-		handle_path(ecmd->argv[0], ecmd->argv, environ);
+		handle_path(ecmd->argv[0], ecmd->argv, context->env);
 	ft_printf("exec %s failed\n", ecmd->argv[0]);
 	context->last_status = 127;
 	exit(context->last_status);
