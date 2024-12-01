@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:00 by mac               #+#    #+#             */
-/*   Updated: 2024/11/24 13:23:32 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:38:13 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ int	process_args(char *old_str, int no_newline)
 
 	j = 0;
 	i = 1;
-	if (old_str[j] == '\0')
-		handle_null(no_newline);
 	new_str = safe_malloc(ft_strlen(old_str) + 1);
 	if ((old_str[0] == '"' && old_str[ft_strlen(old_str) - 1] == '"')
 		|| (old_str[0] == 39 && old_str[ft_strlen(old_str) - 1] == 39))
@@ -103,7 +101,6 @@ int	vash_echo(char **args, t_context *context)
 	i = 1;
 	j = 0;
 	no_newline = 0;
-	handle_no_args(args);
 	if (ft_strncmp(args[1], "-n", 3) == 0)
 	{
 		no_newline = 1;
