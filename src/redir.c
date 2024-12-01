@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mac <mac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 15:54:14 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/28 14:56:25 by mac              ###   ########.fr       */
+/*   Updated: 2024/12/01 16:40:30 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ static void	process_herdoc(char	*line, t_herdoc *hcmd, int p[2])
 {
 	while (1)
 	{
+		signal(SIGINT, handle_sigint_herdoc);
+		if (g_signal_received == SIGINT)
+			break ;
 		line = readline("> ");
-		if (!line)
+		if (!line || g_signal_received == SIGINT)
 			break ;
 		if (ft_strncmp(line, hcmd->delim, ft_strlen(hcmd->delim)) == 0)
 		{
@@ -47,15 +50,25 @@ void	handle_herdoc(t_herdoc *hcmd, t_context *context)
 	line = NULL;
 	if (pipe(p) < 0)
 		exit_error("pipe");
-	process_herdoc(line, hcmd, p);
-	close(p[1]);
 	if (fork1() == 0)
 	{
 		default_signals();
-		exec_pipe_child(hcmd->right, p, 0, context);
+		process_herdoc(line, hcmd, p);
+		close(p[1]);
+		if (fork1() == 0)
+		{
+			exec_pipe_child(hcmd->right, p, 0, context);
+			exit(context->last_status);
+		}
+		ignore_signals();
+		wait(0);
+		exit(0);
 	}
+	close(p[1]);
 	ignore_signals();
-	wait(0);
+	wait(&context->last_status);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigquit);
 }
 
 void	handle_redir(t_redir *rcmd, t_context *context)
