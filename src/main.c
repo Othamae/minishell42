@@ -6,13 +6,13 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/12/01 20:26:27 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:36:00 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//int g_signal_received = 0;
+int	g_signal_received = 0;
 
 int	getcmd(char *buff, int nbuf)
 {
