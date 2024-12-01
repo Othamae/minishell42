@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 19:44:08 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:38:24 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 13:01:22 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_cmd	*execcmd(void)
 {
 	t_exec	*cmd;
 
-	cmd = malloc(sizeof(*cmd));
+	cmd = safe_malloc(sizeof(*cmd));
 	ft_memset(cmd, 0, sizeof(*cmd));
 	cmd->base.type = EXEC_T;
 	return ((t_cmd *)cmd);
