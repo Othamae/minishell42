@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/12/01 20:41:32 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:46:50 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@
 # define D_QUOTE '"'
 # define S_QUOTE 39
 
-extern int g_signal_received;
+extern int	g_signal_received;
 
 typedef struct s_cmd
 {
