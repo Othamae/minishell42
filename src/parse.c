@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:45:53 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:36:38 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 13:41:44 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ t_cmd	*parseredirs(t_cmd *cmd, char **ps, char *es)
 	{
 		tok = get_token(ps, es, 0, 0);
 		if (get_token(ps, es, &q, &eq) != OTHER)
-			exit_error("missing file for redirection");
+		{
+			printf("missing file for redirection\n");
+			return (NULL);
+		}
 		cmd = handle_parseredirs(cmd, q, eq, tok);
 	}
 	return (cmd);
@@ -94,6 +97,8 @@ t_cmd	*parsecmd(char *s, t_wildbuff *buf)
 	if (ft_strchr(s, '*'))
 		expand_wildcards_buff(&s, &es, buf);
 	cmd = parseline(&s, es);
+	if (!cmd)
+		return (NULL);
 	find_next_token(&s, es, "");
 	if (s != es)
 	{
