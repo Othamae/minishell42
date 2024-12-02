@@ -16,3 +16,65 @@ leaks.txt
 }
 
 valgrind -s --suppressions=leaks.txt --leak-check=full --show-leak-kinds=all ./minishell
+
+
+
+// 	TO PRINT THE TREE
+void print_tree(t_cmd *node, int depth)
+{
+	if (!node) {
+		printf("%*s<empty>\n", depth * 4, ""); // Imprime <empty> para nodos nulos
+		return;
+	}
+
+	// Identificar el tipo del nodo
+	const char *type_str = NULL;
+	switch (node->type) {
+		case EXEC_T:      type_str = "EXEC_T"; break;
+		case REDIR_T:     type_str = "REDIR_T"; break;
+		case PIPE_T:      type_str = "PIPE_T"; break;
+		case HERDOC_T:    type_str = "HERDOC_T"; break;
+		case AND_T:       type_str = "AND_T"; break;
+		case OR_T:        type_str = "OR_T"; break;
+		case SUBSHELL_T:  type_str = "SUBSHELL_T"; break;
+		default:          type_str = "UNKNOWN";
+	}
+
+	printf("%*sNode Type: %s\n", depth * 4, "", type_str);
+
+	// Procesar cada tipo específico de nodo
+	if (node->type == EXEC_T) {
+		t_exec *exec_node = (t_exec *)node;
+		printf("%*sCommand: %s\n", (depth + 1) * 4, "", exec_node->argv[0]);
+		for (int i = 1; exec_node->argv[i]; i++) {
+			printf("%*sArg[%d]: %s\n", (depth + 1) * 4, "", i, exec_node->argv[i]);
+		}
+	} else if (node->type == REDIR_T) {
+		t_redir *redir_node = (t_redir *)node;
+		printf("%*sFile: %s\n", (depth + 1) * 4, "", redir_node->file);
+		printf("%*sMode: %d, FD: %d\n", (depth + 1) * 4, "", redir_node->info.mode, redir_node->info.fd);
+		printf("%*sCommand:\n", (depth + 1) * 4, "");
+		print_tree(redir_node->cmd, depth + 2);
+	} else if (node->type == PIPE_T) {
+		t_pipe *pipe_node = (t_pipe *)node;
+		printf("%*sLeft:\n", depth * 4, "");
+		print_tree(pipe_node->left, depth + 1);
+		printf("%*sRight:\n", depth * 4, "");
+		print_tree(pipe_node->right, depth + 1);
+	} else if (node->type == HERDOC_T) {
+		t_herdoc *herdoc_node = (t_herdoc *)node;
+		printf("%*sDelimiter: %s\n", (depth + 1) * 4, "", herdoc_node->delim);
+		printf("%*sRight:\n", depth * 4, "");
+		print_tree(herdoc_node->right, depth + 1);
+	} else if (node->type == AND_T || node->type == OR_T) {
+		t_clist *clist_node = (t_clist *)node;
+		printf("%*sLeft:\n", depth * 4, "");
+		print_tree(clist_node->left, depth + 1);
+		printf("%*sRight:\n", depth * 4, "");
+		print_tree(clist_node->right, depth + 1);
+	} else if (node->type == SUBSHELL_T) {
+		t_subshell *subshell_node = (t_subshell *)node;
+		printf("%*sSubcommand:\n", depth * 4, "");
+		print_tree(subshell_node->subcmd, depth + 1);
+	}
+}
