@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 09:58:57 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:46:50 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@
 # define CLOSE_P ')'
 # define D_QUOTE '"'
 # define S_QUOTE 39
+
+extern int	g_signal_received;
 
 typedef struct s_cmd
 {
@@ -204,10 +206,13 @@ void	handle_sigquit(int sig);
 void	handle_signals(void);
 void	ignore_signals(void);
 void	default_signals(void);
+void	handle_sigint_herdoc(int sig);
 
 // context
 void	init_context(char **env, t_context *context);
 void	free_env(t_context *context);
+void	init_buff(t_wildbuff *buf, int argc, char **argv);
+void	check_sigint(t_context *context);
 
 // free_cmd
 void	free_cmd(t_cmd *cmd);
@@ -217,7 +222,6 @@ int		process_args(char *old_str, int no_newline);
 int		handle_no_args(char **args);
 void	*safe_malloc(size_t bytes);
 void	print_str(char *old_str, char *new_str, int no_newline);
-int		handle_null(int no_newline);
 void	handle_single_quoted_env_var(char *arg, char *old_str, int *j);
 void	handle_double_quoted_env_var(char *arg, char *old_str, int *j);
 void	handle_env_var(char *arg, char *old_str, int *j);

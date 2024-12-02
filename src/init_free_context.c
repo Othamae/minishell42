@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 19:31:00 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 09:35:05 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:26:17 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,20 @@ void	free_env(t_context *context)
 		i++;
 	}
 	free(context->env);
+}
+
+void	init_buff(t_wildbuff *buf, int argc, char **argv)
+{
+	buf->buffer = NULL;
+	(void)argc;
+	(void)argv;
+}
+
+void	check_sigint(t_context *context)
+{
+	if (g_signal_received == SIGINT)
+	{
+		context->last_status = 130;
+		g_signal_received = 0;
+	}
 }

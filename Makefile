@@ -6,7 +6,7 @@
 #    By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/11 16:52:40 by vconesa-          #+#    #+#              #
-#    Updated: 2024/11/29 09:33:04 by vconesa-         ###   ########.fr        #
+#    Updated: 2024/12/01 19:37:55 by vconesa-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS				:=		$(PATH_SRC)/exec.c \
 							$(PATH_SRC)/pipe.c \
 							$(PATH_SRC)/redir.c \
 							$(PATH_SRC)/signal.c \
+							$(PATH_SRC)/signal_herdoc.c \
 							$(PATH_SRC)/token_utils.c \
 							$(PATH_SRC)/token.c \
 							$(PATH_SRC)/utils_2.c \

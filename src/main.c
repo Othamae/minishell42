@@ -6,11 +6,13 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:39:52 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 20:36:00 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	g_signal_received = 0;
 
 int	getcmd(char *buff, int nbuf)
 {
@@ -32,6 +34,35 @@ int	getcmd(char *buff, int nbuf)
 	return (0);
 }
 
+void	handle_signal_exit_status(t_exec *cmd, int status, t_context *context)
+{
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+		{
+			if (ft_strncmp(cmd->argv[0], "cat", 4) == 0)
+			{
+				write(1, "\n", 1);
+				context->last_status = 130;
+			}
+			else
+				context->last_status = 128 + WTERMSIG(status);
+		}
+		else if (WTERMSIG(status) == SIGQUIT)
+		{
+			if (ft_strncmp(cmd->argv[0], "cat", 4) == 0)
+			{
+				write(1, "\n", 1);
+				context->last_status = 131;
+			}
+			else
+				context->last_status = 128 + WTERMSIG(status);
+		}
+	}
+	else
+		context->last_status = WEXITSTATUS(status);
+}
+
 void	handle_exec_t(t_exec *cmd, t_context *context)
 {
 	int	status;
@@ -49,7 +80,7 @@ void	handle_exec_t(t_exec *cmd, t_context *context)
 		wait(&status);
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, handle_sigquit);
-		context->last_status = WEXITSTATUS(status);
+		handle_signal_exit_status(cmd, status, context);
 	}
 }
 
@@ -85,20 +116,21 @@ int	main(int argc, char **argv, char **env)
 	t_cmd		*cmd;
 	t_wildbuff	buf;
 
-	buf.buffer = NULL;
-	(void)argc;
-	(void)argv;
+	init_buff(&buf, argc, argv);
 	init_context(env, &context);
 	handle_signals();
 	while ((getcmd(buff, sizeof(buff)) >= 0))
 	{
+		check_sigint(&context);
 		add_history(buff);
 		cmd = parsecmd(buff, &buf);
 		if (cmd)
 			runcmd(cmd, &context);
 		free_cmd(cmd);
+		cmd = NULL;
 		if (buf.buffer)
 			free(buf.buffer);
+		buf.buffer = NULL;
 	}
 	if (context.env)
 		free_env(&context);

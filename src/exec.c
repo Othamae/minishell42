@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:59:48 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 09:39:44 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/01 15:45:11 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ int	handle_exec(t_exec *ecmd, t_context *context)
 	else
 		handle_path(ecmd->argv[0], ecmd->argv, context->env);
 	ft_printf("exec %s failed\n", ecmd->argv[0]);
-	context->last_status = 127;
+	if (g_signal_received == SIGINT)
+		context->last_status = 130;
+	else
+		context->last_status = 127;
 	exit(context->last_status);
 	return (context->last_status);
 }
