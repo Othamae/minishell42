@@ -6,13 +6,13 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 14:59:48 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/12/01 15:45:11 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/04 10:25:34 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	handle_path(char *s, char **argv, char **environ)
+static int	handle_path(char *s, char **argv, char **env)
 {
 	char	*path_env;
 	char	*path_token;
@@ -20,7 +20,7 @@ static int	handle_path(char *s, char **argv, char **environ)
 	size_t	tok_len;
 	size_t	cmd_len;
 
-	path_env = getenv("PATH");
+	path_env = ft_getenv("PATH", env);
 	if (path_env == NULL)
 		exit_error("Error: PATH not configured\n");
 	path_token = ft_strtok(path_env, PATH_SEPARATOR);
@@ -34,7 +34,7 @@ static int	handle_path(char *s, char **argv, char **environ)
 			f_path[tok_len] = '/';
 			f_path[tok_len + 1] = '\0';
 			ft_strlcpy(f_path + tok_len + 1, s, MAX_PATH_LENGTH - tok_len - 1);
-			execve(f_path, argv, environ);
+			execve(f_path, argv, env);
 		}
 		path_token = ft_strtok(NULL, PATH_SEPARATOR);
 	}
@@ -55,7 +55,7 @@ static int	is_builtin_child(char *cmd)
 int	handle_exec(t_exec *ecmd, t_context *context)
 {
 	if (is_builtin_child(ecmd->argv[0]))
-		return (handle_builtins(ecmd->argv, context));
+		return (handle_builtins(ecmd->argv, context, (t_cmd *)ecmd));
 	if (ecmd->argv[0] == 0)
 	{
 		context->last_status = 1;

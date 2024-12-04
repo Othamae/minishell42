@@ -6,48 +6,47 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 09:30:00 by mac               #+#    #+#             */
-/*   Updated: 2024/12/01 16:38:13 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/04 10:13:46 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	handle_no_args(char **args)
+static int	check_dollar(char **ags, int *i)
 {
-	if (args[1] == NULL)
-	{
-		printf("\n");
-		return (0);
-	}
-	return (0);
-}
-
-static void	process_arguments(char **ags, char *old_str, int *i, int *j)
-{
-	while (ags[*i] != NULL)
-	{
-		if ((ags[*i][0] == '$') || (ags[*i][1] == '$'
+	return ((ags[*i][0] == '$') || (ags[*i][1] == '$'
 			&& (ags[*i][0] == 34 && (ags[*i][ft_strlen(ags[*i]) - 1] == '"')))
 			|| (ags[*i][2] == '$' && (ags[*i][0] == '"'
-			&& (ags[*i][ft_strlen(ags[*i]) - 1] == '"'))))
+			&& (ags[*i][ft_strlen(ags[*i]) - 1] == '"'))));
+}
+
+static int	proc_arguments(char **ags, char *old_str, int *i, t_context *cont)
+{
+	int	j;
+
+	j = 0;
+	while (ags[*i] != NULL)
+	{
+		if (check_dollar(ags, i))
 		{
 			if (ags[*i][0] == '$')
-				handle_env_var(ags[*i], old_str, j);
+				handle_env_var(ags[*i], old_str, &j, cont);
 			else if (ags[*i][1] == '$'
 			&& (ags[*i][0] == '"' && (ags[*i][ft_strlen(ags[*i]) - 1] == '"')))
-				handle_double_quoted_env_var(ags[*i], old_str, j);
+				handle_d_quoted_env(ags[*i], old_str, &j, cont);
 			else
-				handle_single_quoted_env_var(ags[*i], old_str, j);
+				handle_s_quoted_env(ags[*i], old_str, &j, cont);
 		}
 		else
 		{
 			while (*(ags[*i]) != '\0')
-				old_str[(*j)++] = *((ags[*i])++);
+				old_str[j++] = *((ags[*i])++);
 		}
 		if (ags[*i + 1] != NULL)
-			old_str[(*j)++] = ' ';
+			old_str[j++] = ' ';
 		(*i)++;
 	}
+	return (j);
 }
 
 int	process_args(char *old_str, int no_newline)
@@ -108,7 +107,7 @@ int	vash_echo(char **args, t_context *context)
 	}
 	if (ft_strncmp(args[1], "$?", 3) == 0)
 		echo_status(args, context);
-	process_arguments(args, old_str, &i, &j);
+	j = proc_arguments(args, old_str, &i, context);
 	old_str[j] = '\0';
 	process_args(old_str, no_newline);
 	return (0);

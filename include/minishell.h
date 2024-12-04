@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/12/01 20:46:50 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:02:51 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,9 +183,9 @@ void	skip_whitespace(char **s, char *es);
 
 // builtins
 int		vash_echo(char **args, t_context *context);
-int		vash_cd(char **args);
+int		vash_cd(char **args, t_context *context);
 int		vash_env(t_context *context);
-int		handle_builtins(char **args, t_context *context);
+int		handle_builtins(char **args, t_context *context, t_cmd *cmd);
 int		ft_pwd(void);
 int		vash_unset(char **args, t_context *context);
 int		vash_export(char **args, t_context *context);
@@ -207,6 +207,7 @@ void	handle_signals(void);
 void	ignore_signals(void);
 void	default_signals(void);
 void	handle_sigint_herdoc(int sig);
+void	suppress_output(void);
 
 // context
 void	init_context(char **env, t_context *context);
@@ -219,12 +220,14 @@ void	free_cmd(t_cmd *cmd);
 
 // echo
 int		process_args(char *old_str, int no_newline);
-int		handle_no_args(char **args);
 void	*safe_malloc(size_t bytes);
 void	print_str(char *old_str, char *new_str, int no_newline);
-void	handle_single_quoted_env_var(char *arg, char *old_str, int *j);
-void	handle_double_quoted_env_var(char *arg, char *old_str, int *j);
-void	handle_env_var(char *arg, char *old_str, int *j);
+void	handle_s_quoted_env(char *arg, char *old_str, int *j,
+			t_context *context);
+void	handle_d_quoted_env(char *arg, char *old_str, int *j,
+			t_context *context);
+void	handle_env_var(char *arg, char *old_str, int *j, t_context *context);
+char	*ft_getenv(const char *name, char **env);
 
 // export_env_utils.c
 void	print_sorted_env(t_context *context);

@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:23:13 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/12/01 20:36:00 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/04 10:36:22 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,24 @@ void	handle_signal_exit_status(t_exec *cmd, int status, t_context *context)
 		context->last_status = WEXITSTATUS(status);
 }
 
-void	handle_exec_t(t_exec *cmd, t_context *context)
+void	handle_exec_t(t_exec *cmd, t_context *cont)
 {
 	int	status;
 
 	if (is_builtin(cmd->argv[0]))
-		context->last_status = handle_builtins(cmd->argv, context);
+		cont->last_status = handle_builtins(cmd->argv, cont, (t_cmd *)cmd);
 	else
 	{
 		if (fork1() == 0)
 		{
 			default_signals();
-			exit(handle_exec(cmd, context));
+			exit(handle_exec(cmd, cont));
 		}
 		ignore_signals();
 		wait(&status);
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, handle_sigquit);
-		handle_signal_exit_status(cmd, status, context);
+		handle_signal_exit_status(cmd, status, cont);
 	}
 }
 

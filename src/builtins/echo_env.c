@@ -6,19 +6,35 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 12:00:52 by mac               #+#    #+#             */
-/*   Updated: 2024/11/09 12:20:22 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/04 10:05:52 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_env_var(char *arg, char *old_str, int *j)
+char	*ft_getenv(const char *name, char **env)
+{
+	size_t	len;
+	int		i;
+
+	len = ft_strlen(name);
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
+			return (&env[i][len + 1]);
+		i++;
+	}
+	return (NULL);
+}
+
+void	handle_env_var(char *arg, char *old_str, int *j, t_context *context)
 {
 	char	*env_var_name;
 	char	*env_var_value;
 
 	env_var_name = arg + 1;
-	env_var_value = getenv(env_var_name);
+	env_var_value = ft_getenv(env_var_name, context->env);
 	if (env_var_value)
 	{
 		while (*env_var_value != '\0')
@@ -31,14 +47,14 @@ void	handle_env_var(char *arg, char *old_str, int *j)
 	}
 }
 
-void	handle_double_quoted_env_var(char *arg, char *old_str, int *j)
+void	handle_d_quoted_env(char *arg, char *old_str, int *j, t_context *cont)
 {
 	char	*env_var_value;
 	char	*env_var_name;
 
 	env_var_name = arg + 2;
 	env_var_name[strlen(env_var_name) - 1] = '\0';
-	env_var_value = getenv(env_var_name);
+	env_var_value = ft_getenv(env_var_name, cont->env);
 	if (env_var_value)
 	{
 		while (*env_var_value != '\0')
@@ -53,14 +69,14 @@ void	handle_double_quoted_env_var(char *arg, char *old_str, int *j)
 	}
 }
 
-void	handle_single_quoted_env_var(char *arg, char *old_str, int *j)
+void	handle_s_quoted_env(char *arg, char *old_str, int *j, t_context *cont)
 {
 	char	*env_var_value;
 	char	*env_var_name;
 
 	env_var_name = arg + 3;
 	env_var_name[strlen(env_var_name) - 2] = '\0';
-	env_var_value = getenv(env_var_name);
+	env_var_value = ft_getenv(env_var_name, cont->env);
 	if (env_var_value)
 	{
 		while (*env_var_value != '\0')
