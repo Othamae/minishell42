@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 23:19:05 by mac               #+#    #+#             */
-/*   Updated: 2024/12/01 19:38:09 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/04 11:03:46 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,21 @@ void	handle_sigquit(int sig)
 
 void	handle_signals(void)
 {
+	suppress_output();
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 }
 
 void	default_signals(void)
 {
+	suppress_output();
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
 
 void	ignore_signals(void)
 {
+	suppress_output();
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 }
