@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 11:11:55 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/11/29 12:32:07 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:58:38 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	handle_quotes(char **ps, char *es, char **q, char **eq)
 	while (s < es && *s != quote)
 		s++;
 	if (s == es || *s != quote)
-		exit_error("syntax error: missing closing quote\n");
+		printf("syntax error: missing closing quote\n");
 	s++;
 	if (eq)
 		*eq = s;
