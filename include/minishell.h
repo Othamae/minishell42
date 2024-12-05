@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:14:26 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/12/04 11:02:51 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:36:59 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@
 # define CLOSE_P ')'
 # define D_QUOTE '"'
 # define S_QUOTE 39
+# ifndef ECHOCTL
+#  define ECHOCTL 0000100
+# endif
 
 extern int	g_signal_received;
 

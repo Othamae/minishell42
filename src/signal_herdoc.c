@@ -6,7 +6,7 @@
 /*   By: vconesa- <vconesa-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 19:37:24 by vconesa-          #+#    #+#             */
-/*   Updated: 2024/12/04 11:06:36 by vconesa-         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:37:45 by vconesa-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,14 @@ void	suppress_output(void)
 {
 	struct termios	termios_path;
 
+	if (!isatty(0))
+		return ;
 	if (tcgetattr(0, &termios_path) != 0)
+	{
 		perror("Minishell: tcgetattr");
+		return ;
+	}
 	termios_path.c_lflag &= ~ECHOCTL;
-	if (tcsetattr(0, 0, &termios_path) != 0)
+	if (tcsetattr(0, TCSANOW, &termios_path) != 0)
 		perror("Minishell: tcsetattr");
 }
